@@ -2,6 +2,7 @@ package com.yunjishi.lixiang.yunjishi
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -12,11 +13,15 @@ import android.os.Bundle
 import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
 import android.view.View
+import android.view.ViewManager
 import android.widget.ImageView
 import android.widget.ZoomControls
 import com.baidu.location.*
 import com.baidu.mapapi.map.*
 import com.baidu.mapapi.model.LatLng
+import org.jetbrains.anko.*
+import org.jetbrains.anko.constraint.layout.constraintLayout
+import org.jetbrains.anko.custom.ankoView
 
 
 class testMapActivity : AppCompatActivity(), SensorEventListener {
@@ -47,19 +52,34 @@ class testMapActivity : AppCompatActivity(), SensorEventListener {
     private var mCurrentLon = 0.0
     private var mCurrentAccracy: Float = 0.toFloat()
     private var lastX: Double? = 0.0
-
+    private lateinit var mapView: MapView
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_testmap)
+
+//        setContentView(R.layout.activity_testmap)
+
+
+        constraintLayout {
+            mapView = mapView {}.lparams(width = matchParent, height = matchParent)
+            relativeLayout {
+                relativeLayout {
+                    backgroundColor = Color.parseColor("#B80017")
+                }.lparams { width = 100; height = matchParent; alignParentLeft() }
+            }
+        }
         handlePermisson()
         initMap()
     }
 
+    inline fun ViewManager.mapView(init: com.baidu.mapapi.map.MapView.() -> Unit): com.baidu.mapapi.map.MapView {
+        return ankoView({ com.baidu.mapapi.map.MapView(it) }, theme = 0, init = init)
+    }
+
     private fun initMap() {
         val mCurrentMode = MyLocationConfiguration.LocationMode.NORMAL
-        mMapView = findViewById<MapView>(R.id.mMapView)
+        mMapView = mapView
         mLocClient = LocationClient(this)
         mLocClient!!.registerLocationListener(myListener)
         val option = LocationClientOption()
