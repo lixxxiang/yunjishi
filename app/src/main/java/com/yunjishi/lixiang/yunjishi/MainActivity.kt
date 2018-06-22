@@ -4,10 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import com.android.lixiang.base.ui.activity.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import org.apache.cordova.*
 import org.apache.cordova.engine.SystemWebViewEngine
+import org.jetbrains.anko.startActivity
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity(), CordovaInterface {
     protected var activityResultCallback1: CordovaPlugin? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
         val parser = ConfigXmlParser()
         parser.parse(activity)
@@ -32,7 +33,8 @@ class MainActivity : AppCompatActivity(), CordovaInterface {
         }
 
         btn2.setOnClickListener {
-            webview1.loadUrl("javascript:flyBack(\"" + 39.9046900000 + "\",\"" + 116.4071700000 + "\")")
+//            webview1.loadUrl("javascript:flyBack(\"" + 39.9046900000 + "\",\"" + 116.4071700000 + "\")")
+            startActivity<testMapActivity>()
         }
     }
     //43.9706700000,125.3831700000  116.4071700000, 39.9046900000, 20000000
