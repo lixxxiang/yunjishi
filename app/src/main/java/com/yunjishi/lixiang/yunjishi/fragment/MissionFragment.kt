@@ -102,6 +102,8 @@ class MissionFragment : Fragment(), SensorEventListener {
         mZoomOutButton.setOnClickListener {
             val zoomOut: MapStatusUpdate? = MapStatusUpdateFactory.zoomOut()
             mBaiduMap!!.animateMapStatus(zoomOut)
+
+
         }
     }
 
