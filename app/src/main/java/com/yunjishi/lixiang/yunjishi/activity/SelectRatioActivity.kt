@@ -21,7 +21,8 @@ class SelectRatioActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_ratio)
-        StatusBarUtil.setColor(this, Color.parseColor("#262626"), 0)
+        StatusBarUtil.setColor(this, Color.parseColor("#000000"), 0)
+
         mSelectRatioToolbar.title = "分辨率"
         setSupportActionBar(mSelectRatioToolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)

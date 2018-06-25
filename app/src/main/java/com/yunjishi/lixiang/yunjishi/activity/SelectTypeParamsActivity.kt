@@ -24,7 +24,8 @@ class SelectTypeParamsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_type_params)
-        StatusBarUtil.setColor(this, Color.parseColor("#262626"), 0)
+        StatusBarUtil.setColor(this, Color.parseColor("#000000"), 0)
+
         mSelectTypeParamsToolbar.title = "类型"
         setSupportActionBar(mSelectTypeParamsToolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)

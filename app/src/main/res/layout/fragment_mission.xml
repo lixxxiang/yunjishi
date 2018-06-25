@@ -1,41 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.MissionFragment"
-    android:background="#2F2F2F">
+    android:background="#2F2F2F"
+    tools:context=".fragment.MissionFragment">
+
     <RelativeLayout
         android:id="@+id/mSelectAreaRelativeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <RelativeLayout
             android:id="@+id/mFeild1"
             android:layout_width="435dp"
             android:layout_height="216dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="34dp">
+
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/mSubmitImageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/img_submit"/>
+                android:background="@drawable/img_submit" />
+
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="在线提交"
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="149dp"
-                android:textSize="14dp"
-                android:textColor="#FFFFFF"/>
+                android:text="在线提交"
+                android:textColor="#FFFFFF"
+                android:textSize="14dp" />
+
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="在线提交拍摄需求，调动卫星为您拍摄"
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="179dp"
-                android:textSize="14dp"
-                android:textColor="#F5A623"/>
+                android:text="在线提交拍摄需求，调动卫星为您拍摄"
+                android:textColor="#F5A623"
+                android:textSize="14dp" />
         </RelativeLayout>
 
 
@@ -46,78 +52,104 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="30dp"
             android:layout_marginTop="34dp">
+
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/mOrderImageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/img_order"/>
+                android:background="@drawable/img_order" />
+
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="我的订单"
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="149dp"
-                android:textSize="14dp"
-                android:textColor="#FFFFFF"/>
+                android:text="我的订单"
+                android:textColor="#FFFFFF"
+                android:textSize="14dp" />
+
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="实时查看我的订单"
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="179dp"
-                android:textSize="14dp"
-                android:textColor="#F5A623"/>
+                android:text="实时查看我的订单"
+                android:textColor="#F5A623"
+                android:textSize="14dp" />
         </RelativeLayout>
     </RelativeLayout>
 
     <RelativeLayout
-        android:visibility="invisible"
         android:id="@+id/mMapViewRelativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="invisible">
+
         <com.baidu.mapapi.map.MapView
             android:id="@+id/mapView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
+
         <RelativeLayout
             android:id="@+id/mTopRelativeLayout"
             android:layout_width="match_parent"
             android:layout_height="105dp"
             android:background="#99000000">
+            <!--<android.support.v7.widget.AppCompatTextView-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:text="请选择拍摄区域"-->
+            <!--android:textColor="#FFFFFF"-->
+            <!--android:textSize="14dp"-->
+            <!--android:layout_centerInParent="true"/>-->
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/mMapToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/actionBarSize"
+                android:background="#00000000"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp"
+                app:contentInsetStartWithNavigation="0dp"
+                app:titleTextAppearance="@style/Toolbar.TitleText"/>
         </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/mRightRelativeLayout"
-            android:layout_marginTop="105dp"
             android:layout_width="321.5dp"
             android:layout_height="match_parent"
-            android:background="#99000000"
             android:layout_above="@+id/mBottomRelativeLayout"
-            android:layout_alignParentRight="true">
-            
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="105dp"
+            android:background="#99000000">
+
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/mZoomImageView"
                 android:layout_width="28dp"
                 android:layout_height="59dp"
-                android:background="@drawable/ic_zoom"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="47dp"
-                android:layout_centerVertical="true"/>
+                android:background="@drawable/ic_zoom" />
+
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/mZoomInButton"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="#00000000"
-                android:layout_marginLeft="41dp"
                 android:layout_alignTop="@+id/mZoomImageView"
-                android:layout_marginTop="-10dp"/>
+                android:layout_marginLeft="41dp"
+                android:layout_marginTop="-10dp"
+                android:background="#00000000" />
+
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/mZoomOutButton"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="#00000000"
-                android:layout_marginLeft="41dp"
                 android:layout_below="@+id/mZoomInButton"
-                android:layout_marginTop="0dp"/>
+                android:layout_marginLeft="41dp"
+                android:layout_marginTop="0dp"
+                android:background="#00000000" />
         </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/mBottomRelativeLayout"
             android:layout_width="match_parent"
@@ -125,75 +157,139 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="85dp"
             android:background="#99000000">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/mAreaTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="#FFFFFF"
+                android:textSize="14dp" />
         </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/mLeftRelativeLayout"
-            android:layout_marginTop="105dp"
             android:layout_width="321.5dp"
             android:layout_height="match_parent"
-            android:background="#99000000"
             android:layout_above="@+id/mBottomRelativeLayout"
-            android:layout_alignParentLeft="true">
-        </RelativeLayout>
-        
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="105dp"
+            android:background="#99000000"></RelativeLayout>
+
         <android.support.v7.widget.AppCompatImageView
             android:layout_width="31dp"
             android:layout_height="31dp"
-            android:background="@drawable/ic_lt"
             android:layout_below="@+id/mTopRelativeLayout"
             android:layout_toRightOf="@id/mLeftRelativeLayout"
-            />
+            android:background="@drawable/ic_lt" />
 
         <android.support.v7.widget.AppCompatImageView
             android:layout_width="31dp"
             android:layout_height="31dp"
-            android:background="@drawable/ic_rt"
             android:layout_below="@+id/mTopRelativeLayout"
             android:layout_toLeftOf="@id/mRightRelativeLayout"
-            />
+            android:background="@drawable/ic_rt" />
 
         <android.support.v7.widget.AppCompatImageView
             android:layout_width="31dp"
             android:layout_height="31dp"
-            android:background="@drawable/ic_rb"
             android:layout_above="@+id/mBottomRelativeLayout"
             android:layout_toLeftOf="@id/mRightRelativeLayout"
-            />
+            android:background="@drawable/ic_rb" />
 
         <android.support.v7.widget.AppCompatImageView
             android:layout_width="31dp"
             android:layout_height="31dp"
-            android:background="@drawable/ic_lb"
             android:layout_above="@+id/mBottomRelativeLayout"
             android:layout_toRightOf="@id/mLeftRelativeLayout"
-            />
+            android:background="@drawable/ic_lb" />
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/mScanImageView"
             android:layout_width="424dp"
             android:layout_height="3dp"
             android:layout_below="@id/mTopRelativeLayout"
-            android:layout_toRightOf="@+id/mLeftRelativeLayout"
-            android:layout_toLeftOf="@id/mRightRelativeLayout"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:background="@drawable/img_scan"/>
-        
-        
+            android:layout_toLeftOf="@id/mRightRelativeLayout"
+            android:layout_toRightOf="@+id/mLeftRelativeLayout"
+            android:background="@drawable/img_scan" />
+
+
         <!--bottom-->
         <RelativeLayout
             android:id="@+id/mCameraRelativeLayout"
             android:layout_width="match_parent"
             android:layout_height="85dp"
-            android:background="#BF000000"
-            android:layout_alignParentBottom="true">
+            android:layout_alignParentBottom="true"
+            android:background="#BF000000">
+
             <ImageView
                 android:id="@+id/mCameraImageView"
                 android:layout_width="42dp"
                 android:layout_height="42dp"
-                android:background="@drawable/ic_camera"
+                android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"/>
+                android:background="@drawable/ic_camera" />
         </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/mSelectParamsRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000"
+        android:visibility="invisible">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/mSelectParamsToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize"
+            android:background="#000000"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"
+            app:titleTextAppearance="@style/Toolbar.TitleText">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="12dp">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/mDoneTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="完成"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14dp" />
+            </RelativeLayout>
+        </android.support.v7.widget.Toolbar>
+
+        <com.android.lixiang.base.utils.view.BounceScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/mSelectParamsToolbar"
+            android:layout_marginTop="40dp"
+            android:background="#000000">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#000000">
+
+                <com.android.lixiang.base.utils.view.CommentListView
+                    android:id="@+id/mListView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#000000"
+                    android:divider="@drawable/list_item_divider_2"
+                    android:dividerHeight="2px" />
+            </RelativeLayout>
+
+        </com.android.lixiang.base.utils.view.BounceScrollView>
     </RelativeLayout>
 </FrameLayout>

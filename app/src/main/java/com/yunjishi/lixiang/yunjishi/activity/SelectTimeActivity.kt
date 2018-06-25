@@ -32,7 +32,8 @@ class SelectTimeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_time)
-        StatusBarUtil.setColor(this, Color.parseColor("#262626"), 0)
+        StatusBarUtil.setColor(this, Color.parseColor("#000000"), 0)
+
         mSelectTimeToolbar.title = "选择拍摄时间"
         setSupportActionBar(mSelectTimeToolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -66,10 +67,15 @@ class SelectTimeActivity : AppCompatActivity() {
             if (compare_date(detailList!![0], detailList!![1]) == 1) {
                 Toast.makeText(this, "请输入正确的时间", Toast.LENGTH_SHORT).show()
             } else {
-                val intent = Intent()
-                intent.putExtra("TIME", detailList!![0] + "-" + detailList!![1])
-                setResult(Activity.RESULT_OK, intent)
-                this.finish()
+                if(detailList!![0] == "" || detailList!![1] == ""){
+                    Toast.makeText(this, "请输入正确的时间", Toast.LENGTH_SHORT).show()
+                }else{
+                    val intent = Intent()
+                    intent.putExtra("TIME", detailList!![0] + "-" + detailList!![1])
+                    setResult(Activity.RESULT_OK, intent)
+                    this.finish()
+                }
+
             }
         }
     }

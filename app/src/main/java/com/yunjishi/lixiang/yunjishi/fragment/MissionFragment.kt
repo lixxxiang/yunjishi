@@ -2,9 +2,12 @@ package com.yunjishi.lixiang.yunjishi.fragment
 
 import android.Manifest
 import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.graphics.Point
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -15,21 +18,30 @@ import android.os.Handler
 import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
+import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.ZoomControls
 import com.android.lixiang.base.utils.view.DimenUtil
+import com.android.lixiang.base.utils.view.StatusBarUtil
 import com.baidu.location.*
 import com.baidu.mapapi.map.*
 import com.baidu.mapapi.model.LatLng
+import com.baidu.mapapi.utils.DistanceUtil
 
 import com.yunjishi.lixiang.yunjishi.R
-import com.yunjishi.lixiang.yunjishi.activity.SelectParamsActivity
+import com.yunjishi.lixiang.yunjishi.activity.*
+import com.yunjishi.lixiang.yunjishi.adapter.SelectParamsAdapter
+import kotlinx.android.synthetic.main.activity_select_params.*
 import kotlinx.android.synthetic.main.fragment_mission.*
 import kotlinx.coroutines.experimental.channels.actor
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.support.v4.startActivity
 
 class MissionFragment : Fragment(), SensorEventListener {
@@ -47,12 +59,27 @@ class MissionFragment : Fragment(), SensorEventListener {
     private var lastX: Double? = 0.0
     val handler = Handler()
     var task: Runnable? = null
+    private var center = String()
+    private var geoString = String()
+    private var scopeGeo = String()
+    private var area: Double? = 0.0
 
-    private var mTopRelativeLayout: RelativeLayout? = null
-    private var mLeftRelativeLayout: RelativeLayout? = null
-    private var mRightRelativeLayout: RelativeLayout? = null
-    private var mbottomRelativeLayout: RelativeLayout? = null
 
+    var titleList: MutableList<String>? = mutableListOf()
+    var subTitleList: MutableList<String>? = mutableListOf()
+    var detailList: MutableList<String>? = mutableListOf()
+    var typeList: MutableList<String>? = mutableListOf()
+    var ratioList: MutableList<String>? = mutableListOf()
+    var typeIndex = -1
+    var ratioIndex = -1
+    var time = ""
+    var times = ""
+    var TIMES = ""
+    var adapter: SelectParamsAdapter? = null
+    var flag1 = false
+    var flag2 = false
+    var flag3 = false
+    var flag4 = false
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
     }
@@ -83,15 +110,15 @@ class MissionFragment : Fragment(), SensorEventListener {
         initView()
         handlePermisson()
         initMap()
+        initSelectViews()
 
         mFeild1.setOnClickListener {
-            mSelectAreaRelativeLayout.visibility = View.INVISIBLE
             mMapViewRelativeLayout.visibility = View.VISIBLE
         }
 
         mCameraImageView.setOnClickListener{
-            handler.removeCallbacks(task)
-            startActivity<SelectParamsActivity>()
+//            startActivity<SelectParamsActivity>()
+            mSelectParamsRelativeLayout.visibility = View.VISIBLE
         }
 
         mZoomInButton.setOnClickListener {
@@ -102,12 +129,163 @@ class MissionFragment : Fragment(), SensorEventListener {
         mZoomOutButton.setOnClickListener {
             val zoomOut: MapStatusUpdate? = MapStatusUpdateFactory.zoomOut()
             mBaiduMap!!.animateMapStatus(zoomOut)
+        }
+    }
 
+    private fun initSelectViews() {
+        StatusBarUtil.setColor(activity, Color.parseColor("#000000"), 0)
+        mSelectParamsToolbar.title = "请选择拍摄时的参数"
+        (activity as AppCompatActivity).setSupportActionBar(mSelectParamsToolbar)
+        (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
+        initView2()
+
+        mSelectParamsToolbar.setNavigationOnClickListener {
+            mSelectParamsRelativeLayout.visibility = View.GONE
+        }
+
+        mListView.setOnItemClickListener { parent, view, position, id ->
+            when (position) {
+                0 -> {
+                    val intent = Intent(activity, SelectTypeParamsActivity::class.java)
+                    val bundle = Bundle()
+                    bundle.putString("INDEX",typeIndex.toString())
+                    intent.putExtras(bundle)
+                    startActivityForResult(intent, 0)
+                }
+                1 -> {
+                    val intent = Intent(activity, SelectRatioActivity::class.java)
+                    val bundle = Bundle()
+                    bundle.putString("INDEX",ratioIndex.toString())
+                    intent.putExtras(bundle)
+                    startActivityForResult(intent, 1)
+                }
+                2 -> {
+                    val intent = Intent(activity, SelectTimeActivity::class.java)
+                    val bundle = Bundle()
+                    bundle.putString("TIME",time)
+                    intent.putExtras(bundle)
+                    startActivityForResult(intent, 2)
+                }
+                3 -> {
+                    initNumberPicker()
+                }
+            }
+        }
+
+        mDoneTextView.setOnClickListener {
+            startActivity<OrderDetailActivity>()
+        }
+    }
+
+    private fun initNumberPicker() {
+        val builder = AlertDialog.Builder(activity!!)
+        builder.setTitle("拍摄频次")
+        val inflater = LayoutInflater.from(activity)
+        val v = inflater.inflate(R.layout.item_dialog, null)
+        builder.setView(v)
+
+        builder.setNegativeButton("取消") { arg0, arg1 ->
+            arg0.dismiss()
+        }
+        builder.setPositiveButton("确定") { arg0, arg1 ->
+            val et = v.findViewById(R.id.mEditText) as EditText
+            times = et.text.toString()
+            arg0.dismiss()
+            if (times != ""){
+                detailList!![3] = times
+                TIMES = times
+                flag4 = true
+                adapter!!.notifyDataSetChanged()
+            }else if(times == "" && TIMES != ""){
+                detailList!![3] = TIMES
+                TIMES = times
+                flag4 = true
+                adapter!!.notifyDataSetChanged()
+            }
+            checkDone()
+        }
+        val dialog = builder.create()
+
+        dialog.show()
+        dialog.window.setGravity(Gravity.CENTER)//可以设置显示的位置
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 0 && resultCode == AppCompatActivity.RESULT_OK) {
+            val detail = data!!.getStringExtra("TYPE")
+            typeIndex = detail.toInt()
+            if(detail != "-1"){
+                detailList!![0] = typeList!![detail.toInt()]
+                flag1 = true
+                adapter!!.notifyDataSetChanged()
+                checkDone()
+            }
+        }else if(requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK){
+            val detail = data!!.getStringExtra("RATIO")
+            ratioIndex = detail.toInt()
+            if(detail != "-1"){
+                detailList!![1] = ratioList!![detail.toInt()]
+                flag2 = true
+                adapter!!.notifyDataSetChanged()
+                checkDone()
+            }
+        }else if(requestCode == 2 && resultCode == AppCompatActivity.RESULT_OK){
+            val detail = data!!.getStringExtra("TIME")
+            time = detail
+            if(detail != "-"){
+                detailList!![2] = detail
+                flag3 = true
+                adapter!!.notifyDataSetChanged()
+                checkDone()
+            }
+        }
+    }
+
+    private fun initView2() {
+        titleList!!.add("类型")
+        titleList!!.add("分辨率")
+        titleList!!.add("拍摄时间")
+        titleList!!.add("拍摄频次")
+
+        typeList!!.add("标准卫星图")
+        typeList!!.add("夜光卫星图")
+        typeList!!.add("卫星视频")
+
+        ratioList!!.add("小于 1m")
+        ratioList!!.add("1m - 3m")
+        ratioList!!.add("3m - 8m")
+        ratioList!!.add("8m - 16m")
+
+        detailList!!.add("请选择")
+        detailList!!.add("请选择")
+        detailList!!.add("请选择")
+        detailList!!.add("请选择")
+
+        subTitleList!!.add("选择您想拍摄的影响类型")
+        subTitleList!!.add("选择的分辨率值越低，清晰度越高")
+        subTitleList!!.add("您想在什么时间段进行拍摄")
+        subTitleList!!.add("在你您选择的时间范围内，您想拍摄几次")
+
+        adapter = SelectParamsAdapter(titleList, subTitleList, detailList, activity)
+        mListView.adapter = adapter
+    }
+
+    private fun checkDone(){
+        if(flag1 && flag2 && flag3 && flag4){
+            mDoneTextView.visibility = View.VISIBLE
         }
     }
 
     @SuppressLint("ResourceType")
     private fun initView() {
+
+        mMapToolbar.title = "请选择拍摄区域"
+        (activity as AppCompatActivity).setSupportActionBar(mMapToolbar)
+        (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
+
 
         var width = activity!!.application.resources.displayMetrics.widthPixels
         var height = activity!!.application.resources.displayMetrics.heightPixels
@@ -118,19 +296,27 @@ class MissionFragment : Fragment(), SensorEventListener {
         task = object : Runnable {
             override fun run() {
                 // TODO Auto-generated method stub
-                handler.postDelayed(this, 3 * 1000)
-                val curTranslationY = mScanImageView!!.translationY
+//                val curTranslationY = mScanImageView!!.translationY
+//                handler.postDelayed(this, 5 * 1000)
+//                println("mScanImageView!!.translationY$curTranslationY")
                 val animator: ObjectAnimator = ObjectAnimator.ofFloat(mScanImageView!!,
                         "translationY",
-                        curTranslationY,
+                        0F,
                         DimenUtil().dip2px(activity!!, 396F).toFloat(),
-                        curTranslationY)
-                animator.duration = 3000
+                        0F)
+                animator.duration = 5000
+                animator.repeatCount = ValueAnimator.INFINITE//无限循环
+                animator.repeatMode = ValueAnimator.INFINITE//
                 animator.start()
             }
         }
 
         handler.post(task)
+
+        mMapToolbar.setNavigationOnClickListener {
+            mMapViewRelativeLayout.visibility = View.GONE
+        }
+
     }
 
     private fun initMap() {
@@ -164,8 +350,66 @@ class MissionFragment : Fragment(), SensorEventListener {
         mUiSettings.isZoomGesturesEnabled = true
 
 
+        val listener: BaiduMap.OnMapStatusChangeListener = object : BaiduMap.OnMapStatusChangeListener {
+            override fun onMapStatusChangeStart(p0: MapStatus?) {}
+            override fun onMapStatusChangeStart(p0: MapStatus?, p1: Int) {}
+            override fun onMapStatusChange(p0: MapStatus?) {}
+            override fun onMapStatusChangeFinish(p0: MapStatus?) {
+                Handler().postDelayed({
+
+                    if (context != null) {
+                        val ltp = Point()
+                        ltp.x = DimenUtil().dip2px(context!!, 356.5F)
+                        ltp.y = DimenUtil().dip2px(context!!, 105F)
+                        val lt = mBaiduMap!!.projection.fromScreenLocation(ltp)
+
+                        val rbp = Point()
+                        rbp.x = DimenUtil().dip2px(context!!, 782.5F)
+                        rbp.y = DimenUtil().dip2px(context!!, 531F)
+                        val rb = mBaiduMap!!.projection.fromScreenLocation(rbp)
+
+                        if (mBaiduMap!!.projection != null) {
+                            geoString = String.format("%s,%s,%s,%s", lt.longitude, lt.latitude, rb.longitude, rb.latitude)
+                            println("geoString$geoString")
+                            scopeGeo = geoFormat(geoString)
+                            center = String.format("%s,%s", (lt.longitude + rb.longitude) / 2, (lt.latitude + rb.latitude) / 2)
+                            val leftTop = LatLng(lt.latitude, lt.longitude)
+                            val rightBottom = LatLng(rb.latitude, rb.longitude)
+                            area = DistanceUtil.getDistance(leftTop, rightBottom) * DistanceUtil.getDistance(leftTop, rightBottom) / 1000000
+                            val areaString = area.toString()
+                            val temp = areaString.substring(0, areaString.indexOf(".") + 3)
+                            if (areaString.contains("E")) {
+                                if (areaString.contains("-")) {
+                                    mAreaTextView!!.text = String.format("当前面积：小于 0.01平方公里", temp)
+                                } else
+                                    mAreaTextView!!.text = String.format("当前面积：%s 亿平方公里", temp)
+                            } else {
+                                mAreaTextView!!.text = String.format("当前面积：%s 平方公里", temp)
+                            }
+                        }
+                    }
+
+                }, 1000)
+            }
+        }
+        mMapView!!.map.setOnMapStatusChangeListener(listener)
+
+
+
     }
 
+    fun geoFormat(geo: String): String {
+        val prefix = "{\"type\":\"Polygon\",\"coordinates\":[["
+        val suffix = "]]}"
+        val geoArray = geo.split(",".toRegex())
+        val data = "[" + geoArray[0] + "," + geoArray[1] +
+                "],[" + geoArray[2] + "," + geoArray[1] +
+                "],[" + geoArray[2] + "," + geoArray[3] +
+                "],[" + geoArray[0] + "," + geoArray[3] +
+                "],[" + geoArray[0] + "," + geoArray[1] +
+                "]"
+        return String.format("%s%s%s", prefix, data, suffix)
+    }
 
     @RequiresApi(Build.VERSION_CODES.M)
     fun handlePermisson() {
@@ -198,11 +442,14 @@ class MissionFragment : Fragment(), SensorEventListener {
     override fun onDestroy() {
         super.onDestroy()
         mMapView!!.onDestroy()
+        handler.removeCallbacks(task)
+
     }
 
     override fun onResume() {
         super.onResume()
         mMapView!!.onResume()
+        handler.post(task)
     }
 
     override fun onPause() {
