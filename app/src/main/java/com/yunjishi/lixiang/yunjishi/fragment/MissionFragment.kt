@@ -103,7 +103,6 @@ class MissionFragment : Fragment(), SensorEventListener {
             val zoomOut: MapStatusUpdate? = MapStatusUpdateFactory.zoomOut()
             mBaiduMap!!.animateMapStatus(zoomOut)
 
-
         }
     }
 
