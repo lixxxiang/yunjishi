@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.SelectRatioActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="#000000"
+        android:layout_height="match_parent">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/mSelectRatioToolbar"
+            android:layout_width="match_parent"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:titleTextAppearance="@style/Toolbar.TitleText"
+            android:layout_height="?android:attr/actionBarSize"
+            android:background="#000000"/>
+
+        <com.android.lixiang.base.utils.view.BounceScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/mSelectRatioToolbar"
+            android:layout_marginTop="40dp"
+            android:background="#000000">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#000000">
+
+                <com.android.lixiang.base.utils.view.CommentListView
+                    android:id="@+id/mRatioListView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#000000"
+                    android:divider="@drawable/list_item_divider_2"
+                    android:dividerHeight="2px"/>
+            </RelativeLayout>
+
+        </com.android.lixiang.base.utils.view.BounceScrollView>
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,22 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:minHeight="58dp"
+    android:layout_height="58dp">
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/mTimeTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:layout_centerVertical="true"
+        android:textSize="14dp"
+        android:layout_marginLeft="30dp" />
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/mTimeDetailTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:textSize="12dp"
+        android:textColor="#FFFFFF"
+        android:layout_marginRight="30dp" />
+</RelativeLayout>

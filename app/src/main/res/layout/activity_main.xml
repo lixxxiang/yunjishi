@@ -5,22 +5,121 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+    <RelativeLayout
+        android:id="@+id/mBar"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:background="#262626"
+        android:layout_alignParentLeft="true">
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/mAvatarImageView"
+            android:layout_width="37dp"
+            android:layout_height="37dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="34dp"
+            android:background="@drawable/ic_avatar"/>
+        
 
-    <org.apache.cordova.engine.SystemWebView
-        android:id="@+id/webview1"
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/mEarthImageView"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/mAvatarImageView"
+            android:layout_marginTop="65dp"
+            android:background="@drawable/ic_earth_white"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/mEarthTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:textColor="#FFFFFF"
+            android:layout_below="@+id/mEarthImageView"
+            android:layout_marginTop="8dp"
+            android:text="地球"
+            android:layout_centerHorizontal="true"/>
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/mFeild1"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_alignTop="@+id/mEarthImageView"
+            android:background="#00000000"/>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/mMissionImageView"
+            android:layout_width="27dp"
+            android:layout_height="27dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/mEarthImageView"
+            android:layout_marginTop="76dp"
+            android:background="@drawable/ic_mission_white"/>
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/mMissionTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:textColor="#FFFFFF"
+            android:layout_below="@+id/mMissionImageView"
+            android:layout_marginTop="8dp"
+            android:text="任务"
+            android:layout_centerHorizontal="true"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/mFeild2"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_alignTop="@+id/mMissionImageView"
+            android:background="#00000000"/>
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/mSearchImageView"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/mMissionImageView"
+            android:layout_marginTop="76dp"
+            android:background="@drawable/ic_search_white"/>
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/mSearchTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:textColor="#FFFFFF"
+            android:layout_below="@+id/mSearchImageView"
+            android:layout_marginTop="8dp"
+            android:text="搜索"
+            android:layout_centerHorizontal="true"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/mFeild3"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_alignTop="@+id/mSearchImageView"
+            android:background="#00000000"/>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/mFrameLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/mBar"/>
+    <!--<org.apache.cordova.engine.SystemWebView-->
+        <!--android:id="@+id/webview1"-->
+        <!--android:layout_toRightOf="@+id/mBar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--/>-->
 
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <!--<android.support.v7.widget.AppCompatButton-->
+        <!--android:id="@+id/btn"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content" />-->
 
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/btn2"
-        android:layout_below="@+id/btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <!--<android.support.v7.widget.AppCompatButton-->
+        <!--android:id="@+id/btn2"-->
+        <!--android:layout_below="@+id/btn"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content" />-->
 
 
 </RelativeLayout>

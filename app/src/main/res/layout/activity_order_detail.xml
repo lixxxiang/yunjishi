@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.OrderDetailActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:id="@+id/mLeftRelativeLayout"
+            android:layout_width="216dp"
+            android:layout_height="match_parent"
+            android:background="#333333">
+            <RelativeLayout
+                android:id="@+id/mFakeToolbar"
+                android:layout_width="match_parent"
+                android:background="#404040"
+                android:layout_height="49dp">
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/mBackImageView"
+                    android:layout_width="10dp"
+                    android:layout_height="17dp"
+                    android:background="@drawable/ic_back"
+                    android:layout_marginLeft="12dp"
+                    android:layout_centerVertical="true" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="订单详情"
+                    android:textSize="20dp"
+                    android:layout_toRightOf="@+id/mBackImageView"
+                    android:layout_marginLeft="10dp"
+                    android:layout_centerVertical="true"
+                    android:textColor="#FFFFFF" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="13dp"
+                android:layout_below="@+id/mFakeToolbar"
+                android:layout_marginRight="25dp">
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="类型："
+                    android:textSize="12dp"
+                    android:textColor="#DDDDDD"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="标准卫星图"
+                    android:textSize="12dp"
+                    android:textColor="#DDDDDD"
+                    android:layout_marginTop="31dp"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="2px"
+                    android:background="#858585"
+                    android:layout_marginTop="54dp"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="分辨率："
+                    android:layout_marginTop="91dp"
+                    android:textSize="12dp"
+                    android:textColor="#DDDDDD"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0.72 m"
+                    android:textSize="12dp"
+                    android:textColor="#DDDDDD"
+                    android:layout_marginTop="122dp"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="2px"
+                    android:background="#858585"
+                    android:layout_marginTop="145dp"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="拍摄时间："
+                    android:textSize="12dp"
+                    android:layout_marginTop="181dp"
+                    android:textColor="#DDDDDD"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2015.03.34 - 2017.12.23"
+                    android:textSize="12dp"
+                    android:textColor="#DDDDDD"
+                    android:layout_marginTop="212dp"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="2px"
+                    android:background="#858585"
+                    android:layout_marginTop="235dp"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="期待拍摄频率："
+                    android:textSize="12dp"
+                    android:layout_marginTop="272dp"
+                    android:textColor="#DDDDDD"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:textSize="12dp"
+                    android:textColor="#DDDDDD"
+                    android:layout_marginTop="304dp"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="2px"
+                    android:background="#858585"
+                    android:layout_marginTop="327dp"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="面积 19.72 平方公里"
+                    android:textSize="12dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="67dp"
+                    android:textColor="#DDDDDD"
+                    android:layout_centerHorizontal="true"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="审核中/生产中"
+                    android:textSize="12dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="29dp"
+                    android:textColor="#DDDDDD"
+                    android:layout_centerHorizontal="true"/>
+            </RelativeLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/mLeftRelativeLayout">
+            <com.baidu.mapapi.map.MapView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </com.baidu.mapapi.map.MapView>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

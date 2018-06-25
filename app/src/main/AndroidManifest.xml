@@ -9,6 +9,10 @@
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission
+        android:name="android.permission.READ_LOGS"
+        tools:ignore="ProtectedPermissions" />
     <uses-permission
         android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
@@ -16,14 +20,13 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
+        android:name="com.android.lixiang.base.common.BaseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:name="com.android.lixiang.base.common.BaseApplication"
-        android:theme="@style/AppTheme">
-
+        android:theme="@style/AppTheme.NoActionBar">
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
@@ -42,7 +45,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".testMapActivity"></activity>
+        <activity android:name=".testMapActivity" />
+        <activity android:name=".activity.SelectParamsActivity" />
+        <activity android:name=".activity.SelectTypeParamsActivity" />
+        <activity android:name=".activity.SelectRatioActivity" />
+        <activity android:name=".activity.SelectTimeActivity" />
+        <activity android:name=".activity.OrderDetailActivity"></activity>
     </application>
 
 </manifest>

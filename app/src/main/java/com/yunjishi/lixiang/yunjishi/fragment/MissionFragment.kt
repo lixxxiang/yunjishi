@@ -1,6 +1,8 @@
-package com.yunjishi.lixiang.yunjishi
+package com.yunjishi.lixiang.yunjishi.fragment
 
 import android.Manifest
+import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.hardware.Sensor
@@ -8,24 +10,50 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Build
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
+import android.support.v4.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewManager
+import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.ZoomControls
+import com.android.lixiang.base.utils.view.DimenUtil
 import com.baidu.location.*
 import com.baidu.mapapi.map.*
 import com.baidu.mapapi.model.LatLng
-import org.jetbrains.anko.*
-import org.jetbrains.anko.constraint.layout.constraintLayout
-import org.jetbrains.anko.custom.ankoView
-import org.jetbrains.anko.sdk25.coroutines.onClick
+
+import com.yunjishi.lixiang.yunjishi.R
+import com.yunjishi.lixiang.yunjishi.activity.SelectParamsActivity
+import kotlinx.android.synthetic.main.fragment_mission.*
+import kotlinx.coroutines.experimental.channels.actor
+import org.jetbrains.anko.support.v4.startActivity
+
+class MissionFragment : Fragment(), SensorEventListener {
+
+    var mMapView: MapView? = null
+    private var mBaiduMap: BaiduMap? = null
+    var myListener = MyLocationListenner()
+    private var mLocClient: LocationClient? = null
+    private var isFirstLoc = true
+    private var locData: MyLocationData? = null
+    private var mCurrentDirection = 0
+    private var mCurrentLat = 0.0
+    private var mCurrentLon = 0.0
+    private var mCurrentAccracy: Float = 0.toFloat()
+    private var lastX: Double? = 0.0
+    val handler = Handler()
+    var task: Runnable? = null
+
+    private var mTopRelativeLayout: RelativeLayout? = null
+    private var mLeftRelativeLayout: RelativeLayout? = null
+    private var mRightRelativeLayout: RelativeLayout? = null
+    private var mbottomRelativeLayout: RelativeLayout? = null
 
 
-class testMapActivity : AppCompatActivity(), SensorEventListener {
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
     }
 
@@ -42,51 +70,72 @@ class testMapActivity : AppCompatActivity(), SensorEventListener {
         lastX = x
     }
 
-    var mMapView: MapView? = null
-    private var mBaiduMap: BaiduMap? = null
-    var myListener = MyLocationListenner()
-    private var mLocClient: LocationClient? = null
-    private var isFirstLoc = true
-    private var locData: MyLocationData? = null
-    private var mCurrentDirection = 0
-    private var mCurrentLat = 0.0
-    private var mCurrentLon = 0.0
-    private var mCurrentAccracy: Float = 0.toFloat()
-    private var lastX: Double? = 0.0
-    private lateinit var mapView: MapView
-
-    @RequiresApi(Build.VERSION_CODES.M)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-//        setContentView(R.layout.activity_testmap)
-
-
-        constraintLayout {
-            mapView = mapView {}.lparams(width = matchParent, height = matchParent)
-            relativeLayout {
-                relativeLayout {
-                    backgroundColor = Color.parseColor("#B80017")
-                    isClickable = true
-                    isFocusable = true
-                    onClick {
-                        println("--!")
-                    }
-                }.lparams { width = 100; height = matchParent; alignParentLeft() }
-            }
-        }
-        handlePermisson()
-        initMap()
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_mission, container, false)
     }
 
-    inline fun ViewManager.mapView(init: com.baidu.mapapi.map.MapView.() -> Unit): com.baidu.mapapi.map.MapView {
-        return ankoView({ com.baidu.mapapi.map.MapView(it) }, theme = 0, init = init)
+    @RequiresApi(Build.VERSION_CODES.M)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        initView()
+        handlePermisson()
+        initMap()
+
+        mFeild1.setOnClickListener {
+            mSelectAreaRelativeLayout.visibility = View.INVISIBLE
+            mMapViewRelativeLayout.visibility = View.VISIBLE
+        }
+
+        mCameraImageView.setOnClickListener{
+            handler.removeCallbacks(task)
+            startActivity<SelectParamsActivity>()
+        }
+
+        mZoomInButton.setOnClickListener {
+            val zoomIn: MapStatusUpdate? = MapStatusUpdateFactory.zoomIn()
+            mBaiduMap!!.animateMapStatus(zoomIn)
+        }
+
+        mZoomOutButton.setOnClickListener {
+            val zoomOut: MapStatusUpdate? = MapStatusUpdateFactory.zoomOut()
+            mBaiduMap!!.animateMapStatus(zoomOut)
+        }
+    }
+
+    @SuppressLint("ResourceType")
+    private fun initView() {
+
+        var width = activity!!.application.resources.displayMetrics.widthPixels
+        var height = activity!!.application.resources.displayMetrics.heightPixels
+        //1200 1920 px   706 1129 dp   768
+        println(DimenUtil().px2dip(activity!!,height.toFloat()))
+        println(DimenUtil().px2dip(activity!!,width.toFloat()))
+
+        task = object : Runnable {
+            override fun run() {
+                // TODO Auto-generated method stub
+                handler.postDelayed(this, 3 * 1000)
+                val curTranslationY = mScanImageView!!.translationY
+                val animator: ObjectAnimator = ObjectAnimator.ofFloat(mScanImageView!!,
+                        "translationY",
+                        curTranslationY,
+                        DimenUtil().dip2px(activity!!, 396F).toFloat(),
+                        curTranslationY)
+                animator.duration = 3000
+                animator.start()
+            }
+        }
+
+        handler.post(task)
     }
 
     private fun initMap() {
         val mCurrentMode = MyLocationConfiguration.LocationMode.NORMAL
         mMapView = mapView
-        mLocClient = LocationClient(this)
+        mLocClient = LocationClient(activity)
         mLocClient!!.registerLocationListener(myListener)
         val option = LocationClientOption()
         option.isOpenGps = true
@@ -112,16 +161,18 @@ class testMapActivity : AppCompatActivity(), SensorEventListener {
         mUiSettings.isScrollGesturesEnabled = true
         mUiSettings.isOverlookingGesturesEnabled = true
         mUiSettings.isZoomGesturesEnabled = true
+
+
     }
 
 
     @RequiresApi(Build.VERSION_CODES.M)
     fun handlePermisson() {
         val permission = Manifest.permission.ACCESS_COARSE_LOCATION
-        val checkSelfPermission = ActivityCompat.checkSelfPermission(this, permission)
+        val checkSelfPermission = ActivityCompat.checkSelfPermission(activity!!, permission)
         if (checkSelfPermission == PackageManager.PERMISSION_GRANTED) {
         } else {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(activity!!, permission)) {
             } else {
                 myRequestPermission()
             }
