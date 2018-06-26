@@ -1,4 +1,4 @@
-package com.yunjishi.lixiang.yunjishi.adapter;
+package com.yunjishi.lixiang.yunjishi.view.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -12,21 +12,19 @@ import com.yunjishi.lixiang.yunjishi.R;
 
 import java.util.List;
 
-public class SelectParamsAdapter extends BaseAdapter {
+public class SelectTimeAdapter extends BaseAdapter {
 
     private List<String> titleList;
-    private List<String> subTitleList;
     private List<String> detailList;
     private LayoutInflater inflater;
     private Context context;
 
 
-    public SelectParamsAdapter() {
+    public SelectTimeAdapter() {
     }
 
-    public SelectParamsAdapter( List<String> titleList, List<String> subTitleList, List<String> detailList,Context context) {
+    public SelectTimeAdapter(List<String> titleList, List<String> detailList, Context context) {
         this.titleList = titleList;
-        this.subTitleList = subTitleList;
         this.detailList = detailList;
         this.context = context;
         this.inflater = LayoutInflater.from(context);
@@ -50,13 +48,15 @@ public class SelectParamsAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         @SuppressLint("ViewHolder")
-        View view = inflater.inflate(R.layout.item_select_params, null);
-        TextView item_tv = view.findViewById(R.id.mTitleTextView);
-        TextView item_subTv = view.findViewById(R.id.mSubTitleTextView);
-        TextView item_detail_tv = view.findViewById(R.id.mDetailTextView);
+        View view = inflater.inflate(R.layout.item_time_params, null);
+        TextView item_tv = view.findViewById(R.id.mTimeTitleTextView);
+        TextView item_detail_tv = view.findViewById(R.id.mTimeDetailTextView);
         item_tv.setText(titleList.get(position));
-        item_detail_tv.setText(detailList.get(position));
-        item_subTv.setText(subTitleList.get(position));
+        if (detailList.size() != 0){
+            String s = detailList.get(position);
+            System.out.println(s);
+            item_detail_tv.setText(s);
+        }
         return view;
     }
 

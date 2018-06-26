@@ -1,4 +1,4 @@
-package com.yunjishi.lixiang.yunjishi.activity
+package com.yunjishi.lixiang.yunjishi.view.activity
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -11,7 +11,7 @@ import android.widget.AbsListView
 import android.widget.Toast
 import com.android.lixiang.base.utils.view.StatusBarUtil
 import com.yunjishi.lixiang.yunjishi.R
-import com.yunjishi.lixiang.yunjishi.adapter.SelectTimeAdapter
+import com.yunjishi.lixiang.yunjishi.view.adapter.SelectTimeAdapter
 import kotlinx.android.synthetic.main.activity_select_time.*
 import java.text.SimpleDateFormat
 import java.util.*

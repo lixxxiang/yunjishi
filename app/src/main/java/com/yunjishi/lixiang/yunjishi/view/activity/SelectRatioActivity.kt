@@ -1,4 +1,4 @@
-package com.yunjishi.lixiang.yunjishi.activity
+package com.yunjishi.lixiang.yunjishi.view.activity
 
 import android.app.Activity
 import android.content.Intent
@@ -8,9 +8,8 @@ import android.os.Bundle
 import android.widget.AbsListView
 import com.android.lixiang.base.utils.view.StatusBarUtil
 import com.yunjishi.lixiang.yunjishi.R
-import com.yunjishi.lixiang.yunjishi.adapter.SelectTypeParamsAdapter
+import com.yunjishi.lixiang.yunjishi.view.adapter.SelectTypeParamsAdapter
 import kotlinx.android.synthetic.main.activity_select_ratio.*
-import kotlinx.android.synthetic.main.activity_select_type_params.*
 
 class SelectRatioActivity : AppCompatActivity() {
 

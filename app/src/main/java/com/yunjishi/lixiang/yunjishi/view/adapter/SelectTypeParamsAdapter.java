@@ -1,4 +1,4 @@
-package com.yunjishi.lixiang.yunjishi.adapter;
+package com.yunjishi.lixiang.yunjishi.view.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

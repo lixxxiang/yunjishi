@@ -1,16 +1,13 @@
-package com.yunjishi.lixiang.yunjishi.activity
+package com.yunjishi.lixiang.yunjishi.view.activity
 
 import android.app.Activity
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.AbsListView
 import com.android.lixiang.base.utils.view.StatusBarUtil
 import com.yunjishi.lixiang.yunjishi.R
-import com.yunjishi.lixiang.yunjishi.adapter.SelectParamsAdapter
-import com.yunjishi.lixiang.yunjishi.adapter.SelectTypeParamsAdapter
-import kotlinx.android.synthetic.main.activity_select_params.*
+import com.yunjishi.lixiang.yunjishi.view.adapter.SelectTypeParamsAdapter
 import kotlinx.android.synthetic.main.activity_select_type_params.*
 import android.content.Intent
 

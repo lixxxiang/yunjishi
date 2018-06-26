@@ -1,4 +1,4 @@
-package com.yunjishi.lixiang.yunjishi.fragment
+package com.yunjishi.lixiang.yunjishi.view.fragment
 
 import android.net.Uri
 import android.os.Bundle
@@ -43,7 +43,7 @@ class EarthFragment : Fragment() {
                 mUploadMessage = uploadMsg
             }
         }
-        mWebView.loadUrl("http://www.baidu.com")
+        mWebView.loadUrl("http://10.10.90.14:8088/globe.html")
 //        mWebView.registerHandler("submitFromWeb", BridgeHandler { data, function ->
 //            Toast.makeText(activity, data, Toast.LENGTH_SHORT).show()
 //        })

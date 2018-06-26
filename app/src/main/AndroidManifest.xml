@@ -37,7 +37,7 @@
             android:value="0VEjsj8sS4j2SX7GGxRwxnmAfGVw8mbP" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".view.activity.MainActivity"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,12 +45,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".testMapActivity" />
-        <activity android:name=".activity.SelectParamsActivity" />
-        <activity android:name=".activity.SelectTypeParamsActivity" />
-        <activity android:name=".activity.SelectRatioActivity" />
-        <activity android:name=".activity.SelectTimeActivity" />
-        <activity android:name=".activity.OrderDetailActivity"></activity>
+        <activity android:name=".view.activity.SelectTypeParamsActivity" />
+        <activity android:name=".view.activity.SelectRatioActivity" />
+        <activity android:name=".view.activity.SelectTimeActivity" />
+        <activity android:name=".view.activity.OrderDetailActivity"/>
     </application>
 
 </manifest>

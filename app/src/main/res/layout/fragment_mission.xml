@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#2F2F2F"
-    tools:context=".fragment.MissionFragment">
+    tools:context=".view.fragment.MissionFragment">
 
     <RelativeLayout
         android:id="@+id/mSelectAreaRelativeLayout"
@@ -13,7 +13,7 @@
         android:layout_height="match_parent">
 
         <RelativeLayout
-            android:id="@+id/mFeild1"
+            android:id="@+id/mMissionFeild1"
             android:layout_width="435dp"
             android:layout_height="216dp"
             android:layout_marginLeft="30dp"
@@ -46,7 +46,7 @@
 
 
         <RelativeLayout
-            android:id="@+id/mFeild2"
+            android:id="@+id/mMissionFeild2"
             android:layout_width="435dp"
             android:layout_height="216dp"
             android:layout_alignParentRight="true"
@@ -261,7 +261,6 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/mDoneTextView"
-                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="完成"
@@ -292,5 +291,15 @@
             </RelativeLayout>
 
         </com.android.lixiang.base.utils.view.BounceScrollView>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/mOrderWebViewReletiveLayout"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.github.lzyzsd.jsbridge.BridgeWebView
+            android:id="@+id/mOrderWebView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
     </RelativeLayout>
 </FrameLayout>

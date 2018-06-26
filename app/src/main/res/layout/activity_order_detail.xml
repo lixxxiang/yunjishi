@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.OrderDetailActivity">
+    tools:context=".view.activity.OrderDetailActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -60,9 +60,9 @@
                     android:textColor="#DDDDDD"/>
 
                 <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/mTypeTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="标准卫星图"
                     android:textSize="12dp"
                     android:textColor="#DDDDDD"
                     android:layout_marginTop="31dp"/>
@@ -81,9 +81,9 @@
                     android:textColor="#DDDDDD"/>
 
                 <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/mRatioTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0.72 m"
                     android:textSize="12dp"
                     android:textColor="#DDDDDD"
                     android:layout_marginTop="122dp"/>
@@ -102,9 +102,9 @@
                     android:textColor="#DDDDDD"/>
 
                 <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/mTimeTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2015.03.34 - 2017.12.23"
                     android:textSize="12dp"
                     android:textColor="#DDDDDD"
                     android:layout_marginTop="212dp"/>
@@ -123,9 +123,9 @@
                     android:textColor="#DDDDDD"/>
 
                 <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/mTimesTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1"
                     android:textSize="12dp"
                     android:textColor="#DDDDDD"
                     android:layout_marginTop="304dp"/>
@@ -136,9 +136,9 @@
                     android:layout_marginTop="327dp"/>
 
                 <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/mAreaTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="面积 19.72 平方公里"
                     android:textSize="12dp"
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="67dp"
@@ -146,9 +146,9 @@
                     android:layout_centerHorizontal="true"/>
 
                 <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/mStateTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="审核中/生产中"
                     android:textSize="12dp"
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="29dp"
@@ -161,6 +161,7 @@
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/mLeftRelativeLayout">
             <com.baidu.mapapi.map.MapView
+                android:id="@+id/mOrderDetailMapView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
             </com.baidu.mapapi.map.MapView>
