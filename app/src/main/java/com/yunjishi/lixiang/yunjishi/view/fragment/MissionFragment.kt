@@ -90,7 +90,7 @@ class MissionFragment() : BaseMvpFragment<MissionPresenter>(), MissionView, Sens
     private var scopeGeo = String()
     private var area: Double? = 0.0
     private var userId: String? = null
-
+    private var handleBackPressed = true
 
     var titleList: MutableList<String>? = mutableListOf()
     var subTitleList: MutableList<String>? = mutableListOf()
@@ -107,7 +107,7 @@ class MissionFragment() : BaseMvpFragment<MissionPresenter>(), MissionView, Sens
     var flag2 = false
     var flag3 = false
     var flag4 = false
-    var mMainService: MissionService? = null
+    var pageIndex = 0
 
     override fun injectComponent() {
         DaggerMissionComponent.builder().fragmentComponent(fragmentComponent)
@@ -120,7 +120,38 @@ class MissionFragment() : BaseMvpFragment<MissionPresenter>(), MissionView, Sens
     }
 
     override fun onBackPressed(): Boolean {
-        return BackHandlerHelper.handleBackPress(this)
+        when (pageIndex) {
+            0 -> {
+                //外理返回键
+                println("--0")
+//                return BackHandlerHelper.handleBackPress(this)
+                activity!!.moveTaskToBack(false)
+                return true
+            }
+            1 -> {
+                println("--1")
+
+                pageIndex = 0
+                mMapViewRelativeLayout.visibility = View.GONE
+                return true
+            }
+            2 -> {
+                println("--2")
+
+                pageIndex = 1
+                mSelectParamsRelativeLayout.visibility = View.GONE
+                return true
+            }
+            else -> {
+                // 如果不包含子Fragment
+                // 或子Fragment没有外理back需求
+                // 可如直接 return false;
+                // 注：如果Fragment/Activity 中可以使用ViewPager 代替 this
+                //
+                println("》》》》")
+                return BackHandlerHelper.handleBackPress(this)
+            }
+        }
     }
 
 
@@ -157,6 +188,7 @@ class MissionFragment() : BaseMvpFragment<MissionPresenter>(), MissionView, Sens
         initOrder()
 
         mMissionFeild1.setOnClickListener {
+            pageIndex = 1
             mMapViewRelativeLayout.visibility = View.VISIBLE
         }
 
@@ -165,7 +197,7 @@ class MissionFragment() : BaseMvpFragment<MissionPresenter>(), MissionView, Sens
         }
 
         mCameraImageView.setOnClickListener {
-            //            startActivity<SelectParamsActivity>()
+            pageIndex = 2
             mSelectParamsRelativeLayout.visibility = View.VISIBLE
         }
 
