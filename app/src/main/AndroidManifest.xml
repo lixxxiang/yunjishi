@@ -48,7 +48,10 @@
         <activity android:name=".view.activity.SelectTypeParamsActivity" />
         <activity android:name=".view.activity.SelectRatioActivity" />
         <activity android:name=".view.activity.SelectTimeActivity" />
-        <activity android:name=".view.activity.OrderDetailActivity"/>
+        <activity android:name=".view.activity.OrderDetailActivity" />
+        <activity android:name=".view.activity.VideoPlayerActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="landscape" ></activity>
     </application>
 
 </manifest>

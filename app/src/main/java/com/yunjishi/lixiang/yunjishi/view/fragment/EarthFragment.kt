@@ -13,7 +13,9 @@ import com.github.lzyzsd.jsbridge.BridgeHandler
 import com.github.lzyzsd.jsbridge.DefaultHandler
 
 import com.yunjishi.lixiang.yunjishi.R
+import com.yunjishi.lixiang.yunjishi.view.activity.VideoPlayerActivity
 import kotlinx.android.synthetic.main.fragment_earth.*
+import org.jetbrains.anko.support.v4.startActivity
 
 
 class EarthFragment : Fragment() {
@@ -47,5 +49,6 @@ class EarthFragment : Fragment() {
 //        mWebView.registerHandler("submitFromWeb", BridgeHandler { data, function ->
 //            Toast.makeText(activity, data, Toast.LENGTH_SHORT).show()
 //        })
+        startActivity<VideoPlayerActivity>()
     }
 }

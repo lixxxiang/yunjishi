@@ -17,6 +17,7 @@ class SelectTypeParamsActivity : AppCompatActivity() {
     var titleList: MutableList<String>? = mutableListOf()
     var adapter: SelectTypeParamsAdapter? = null
     var index = -1
+    var INDEX = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,8 +30,8 @@ class SelectTypeParamsActivity : AppCompatActivity() {
 
         val intent = intent
         val bundle = intent.extras
-        val INDEX = bundle.getString("INDEX")
-        println(bundle.getString("INDEX"))
+        INDEX = bundle.getString("INDEX")
+//        println(bundle.getString("INDEX"))
         initView()
 
         if (bundle.getString("INDEX") != "-1"){
@@ -61,6 +62,27 @@ class SelectTypeParamsActivity : AppCompatActivity() {
                 setResult(Activity.RESULT_OK, intent)
                 this.finish()
             }
+        }
+    }
+
+    override fun onBackPressed() {
+//        super.onBackPressed()
+        println("index$index")
+        println("INDEX$INDEX")
+        val intent = Intent()
+        if(index == -1 && INDEX == "-1"){
+            intent.putExtra("TYPE", index.toString())
+            setResult(Activity.RESULT_OK, intent)
+            this.finish()
+        }else if(index == -1 && INDEX != "-1"){
+            intent.putExtra("TYPE", INDEX)
+            setResult(Activity.RESULT_OK, intent)
+            this.finish()
+        }else{
+            println("ddddddd")
+            intent.putExtra("TYPE", index.toString())
+            setResult(Activity.RESULT_OK, intent)
+            this.finish()
         }
     }
 

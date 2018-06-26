@@ -12,71 +12,86 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:id="@+id/mMissionFeild1"
-            android:layout_width="435dp"
-            android:layout_height="216dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="34dp">
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/mSubmitImageView"
-                android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <RelativeLayout
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:background="@drawable/img_submit" />
+                android:layout_weight="1">
+                <RelativeLayout
+                    android:id="@+id/mMissionFeild1"
+                    android:layout_width="435dp"
+                    android:layout_height="216dp"
+                    android:layout_marginTop="34dp"
+                    android:layout_centerHorizontal="true">
 
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="18dp"
-                android:layout_marginTop="149dp"
-                android:text="在线提交"
-                android:textColor="#FFFFFF"
-                android:textSize="14dp" />
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/mSubmitImageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/img_submit" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="18dp"
-                android:layout_marginTop="179dp"
-                android:text="在线提交拍摄需求，调动卫星为您拍摄"
-                android:textColor="#F5A623"
-                android:textSize="14dp" />
-        </RelativeLayout>
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="18dp"
+                        android:layout_marginTop="149dp"
+                        android:text="在线提交"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14dp" />
 
-
-        <RelativeLayout
-            android:id="@+id/mMissionFeild2"
-            android:layout_width="435dp"
-            android:layout_height="216dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="34dp">
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/mOrderImageView"
-                android:layout_width="match_parent"
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="18dp"
+                        android:layout_marginTop="179dp"
+                        android:text="在线提交拍摄需求，调动卫星为您拍摄"
+                        android:textColor="#F5A623"
+                        android:textSize="14dp" />
+                </RelativeLayout>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:background="@drawable/img_order" />
+                android:layout_weight="1">
+                <RelativeLayout
+                    android:id="@+id/mMissionFeild2"
+                    android:layout_width="435dp"
+                    android:layout_marginTop="34dp"
+                    android:layout_height="216dp"
+                    android:layout_centerHorizontal="true">
 
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="18dp"
-                android:layout_marginTop="149dp"
-                android:text="我的订单"
-                android:textColor="#FFFFFF"
-                android:textSize="14dp" />
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/mOrderImageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/img_order" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="18dp"
-                android:layout_marginTop="179dp"
-                android:text="实时查看我的订单"
-                android:textColor="#F5A623"
-                android:textSize="14dp" />
-        </RelativeLayout>
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="18dp"
+                        android:layout_marginTop="149dp"
+                        android:text="我的订单"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14dp" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="18dp"
+                        android:layout_marginTop="179dp"
+                        android:text="实时查看我的订单"
+                        android:textColor="#F5A623"
+                        android:textSize="14dp" />
+                </RelativeLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+
+
     </RelativeLayout>
 
     <RelativeLayout

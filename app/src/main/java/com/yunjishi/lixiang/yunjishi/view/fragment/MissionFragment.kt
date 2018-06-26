@@ -321,9 +321,11 @@ class MissionFragment() : BaseMvpFragment<MissionPresenter>(), MissionView, Sens
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        println(data!!.getStringExtra("TYPE"))
         if (requestCode == 0 && resultCode == AppCompatActivity.RESULT_OK) {
             val detail = data!!.getStringExtra("TYPE")
             typeIndex = detail.toInt()
+            println("typeIndex$typeIndex")
             if (detail != "-1") {
                 detailList!![0] = typeList!![detail.toInt()]
                 flag1 = true

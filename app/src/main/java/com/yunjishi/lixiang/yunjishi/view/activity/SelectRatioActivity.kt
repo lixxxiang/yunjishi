@@ -16,6 +16,7 @@ class SelectRatioActivity : AppCompatActivity() {
     var titleList: MutableList<String>? = mutableListOf()
     var adapter: SelectTypeParamsAdapter? = null
     var index = -1
+    var INDEX = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +28,7 @@ class SelectRatioActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         val intent = intent
         val bundle = intent.extras
-        val INDEX = bundle.getString("INDEX")
+        INDEX = bundle.getString("INDEX")
         initView()
 
 
@@ -58,6 +59,24 @@ class SelectRatioActivity : AppCompatActivity() {
                 setResult(Activity.RESULT_OK, intent)
                 this.finish()
             }
+        }
+    }
+
+    override fun onBackPressed() {
+//        super.onBackPressed()
+        val intent = Intent()
+        if(index == -1 && INDEX == "-1"){
+            intent.putExtra("RATIO", index.toString())
+            setResult(Activity.RESULT_OK, intent)
+            this.finish()
+        }else if(index == -1 && INDEX != "-1"){
+            intent.putExtra("RATIO", INDEX)
+            setResult(Activity.RESULT_OK, intent)
+            this.finish()
+        }else{
+            intent.putExtra("RATIO", index.toString())
+            setResult(Activity.RESULT_OK, intent)
+            this.finish()
         }
     }
 

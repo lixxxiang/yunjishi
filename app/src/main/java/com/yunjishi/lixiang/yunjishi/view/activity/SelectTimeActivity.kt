@@ -80,6 +80,23 @@ class SelectTimeActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+//        super.onBackPressed()
+        if (compare_date(detailList!![0], detailList!![1]) == 1) {
+            Toast.makeText(this, "请输入正确的时间", Toast.LENGTH_SHORT).show()
+        } else {
+            if(detailList!![0] == "" || detailList!![1] == ""){
+                Toast.makeText(this, "请输入正确的时间", Toast.LENGTH_SHORT).show()
+            }else{
+                val intent = Intent()
+                intent.putExtra("TIME", detailList!![0] + "-" + detailList!![1])
+                setResult(Activity.RESULT_OK, intent)
+                this.finish()
+            }
+
+        }
+    }
+
     private fun initView() {
         titleList!!.add("拍摄起始时间")
         titleList!!.add("拍摄终止时间")
