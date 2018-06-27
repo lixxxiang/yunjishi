@@ -38,4 +38,5 @@ dependencies {
     implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     kapt 'com.google.dagger:dagger-compiler:2.16'
+    implementation project(':vitamio')
 }

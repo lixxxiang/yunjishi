@@ -26,7 +26,7 @@ class OrderDetailActivity : BaseMvpActivity<OrderDetailPresenter>(), OrderDetail
     var typeList: MutableList<String> = mutableListOf()
     var statusList: MutableList<String> = mutableListOf()
     var mBaiduMap: BaiduMap? = null
-
+    var demandId: String? = ""
     var demandDetailBean = DemandDetailBean()
     override fun injectComponent() {
         DaggerOrderDetailComponent.builder().activityComponent(activityComponent)
@@ -84,7 +84,10 @@ class OrderDetailActivity : BaseMvpActivity<OrderDetailPresenter>(), OrderDetail
         }
 
         mPresenter.mView = this
-        mPresenter.getDemandDetail("123456", "1806111631000424304")
+        val intent = intent
+        val bundle = intent.extras
+        demandId = bundle.getString("DEMAND_ID")
+        mPresenter.getDemandDetail("123456", demandId.toString())
 
         initView()
 

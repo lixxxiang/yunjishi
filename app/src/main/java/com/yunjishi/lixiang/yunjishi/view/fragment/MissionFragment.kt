@@ -26,6 +26,7 @@ import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import android.widget.ZoomControls
 import com.android.lixiang.base.database.UserProfile
 import com.android.lixiang.base.ui.fragment.BaseMvpFragment
@@ -38,6 +39,7 @@ import com.baidu.mapapi.utils.DistanceUtil
 import com.android.lixiang.base.database.DatabaseManager
 import com.github.ikidou.fragmentBackHandler.BackHandlerHelper
 import com.github.ikidou.fragmentBackHandler.FragmentBackHandler
+import com.github.lzyzsd.jsbridge.BridgeHandler
 import com.github.lzyzsd.jsbridge.DefaultHandler
 
 import com.yunjishi.lixiang.yunjishi.R
@@ -210,9 +212,16 @@ class MissionFragment() : BaseMvpFragment<MissionPresenter>(), MissionView, Sens
             val zoomOut: MapStatusUpdate? = MapStatusUpdateFactory.zoomOut()
             mBaiduMap!!.animateMapStatus(zoomOut)
         }
+
+        mOrderWebViewToolbar.setNavigationOnClickListener {
+            mOrderWebViewReletiveLayout.visibility = View.GONE
+        }
     }
 
     private fun initOrder() {
+        mOrderWebViewToolbar.title = "我的订单"
+        (activity as AppCompatActivity).setSupportActionBar(mOrderWebViewToolbar)
+        (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         mOrderWebView.setBackgroundColor(0);
         mOrderWebView.setDefaultHandler(DefaultHandler())
         mOrderWebView.webChromeClient = object : WebChromeClient() {
@@ -229,7 +238,18 @@ class MissionFragment() : BaseMvpFragment<MissionPresenter>(), MissionView, Sens
                 mUploadMessage = uploadMsg
             }
         }
-        mOrderWebView.loadUrl("http://www.baidu.com")
+        mOrderWebView.loadUrl("http://10.10.90.40/demand.html?userId=123456")
+        mOrderWebView.registerHandler("demandShow", BridgeHandler { data, function ->
+//            Toast.makeText(activity, data, Toast.LENGTH_SHORT).show()
+            if (data!= null){
+                val intent = Intent(activity, OrderDetailActivity::class.java)
+                val bundle = Bundle()
+                bundle.putString("DEMAND_ID", data)
+                intent.putExtras(bundle)
+                startActivity(intent)
+            }
+        })
+
     }
 
 
@@ -543,8 +563,8 @@ class MissionFragment() : BaseMvpFragment<MissionPresenter>(), MissionView, Sens
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-        }
+//        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//        }
     }
 
     override fun onDestroy() {

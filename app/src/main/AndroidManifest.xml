@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission
         android:name="android.permission.READ_LOGS"
         tools:ignore="ProtectedPermissions" />
@@ -45,13 +46,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.SelectTypeParamsActivity" />
-        <activity android:name=".view.activity.SelectRatioActivity" />
-        <activity android:name=".view.activity.SelectTimeActivity" />
-        <activity android:name=".view.activity.OrderDetailActivity" />
-        <activity android:name=".view.activity.VideoPlayerActivity"
+        <activity
+            android:name=".view.activity.SelectTypeParamsActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".view.activity.SelectRatioActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".view.activity.SelectTimeActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".view.activity.OrderDetailActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".view.activity.VideoPlayerActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="landscape" ></activity>
+            android:screenOrientation="landscape" />
+        <activity android:name=".view.activity.PdfViewerActivity"
+            android:screenOrientation="landscape"/>
     </application>
 
 </manifest>
