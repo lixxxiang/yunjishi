@@ -20,8 +20,10 @@ import kotlinx.android.synthetic.main.fragment_earth.*
 import org.jetbrains.anko.support.v4.startActivity
 import com.yunjishi.lixiang.yunjishi.view.activity.MainActivity
 import android.app.Activity
+import android.content.Context
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import com.yunjishi.lixiang.yunjishi.view.activity.PdfViewerActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -30,6 +32,7 @@ class EarthFragment : Fragment() {
     var mUploadMessage: ValueCallback<Uri>? = null
     var userId: String?= ""
     var loginStatus: String?= ""
+    var productId: String? = "-1"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -50,6 +53,9 @@ class EarthFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         mWebView.setDefaultHandler(DefaultHandler())
+        val sp = activity!!.getSharedPreferences("XXX", Context.MODE_PRIVATE)
+        println("sp.getString" + sp.getString("PRODUCT_ID", ""))
+        productId = sp.getString("PRODUCT_ID", "")
         mWebView.webChromeClient = object : WebChromeClient() {
 
             fun openFileChooser(uploadMsg: ValueCallback<Uri>, AcceptType: String, capture: String) {
@@ -66,11 +72,9 @@ class EarthFragment : Fragment() {
         }
 
         if(userId == "-1"){
-            mWebView.loadUrl("http://10.10.90.14:8088/globe.html?loginStatus=$loginStatus")
-
+            mWebView.loadUrl("http://202.111.178.10:12380/globe.html?loginStatus=$loginStatus")
         }else{
-            mWebView.loadUrl("http://10.10.90.14:8088/globe.html?userId=$userId&loginStatus=$loginStatus")
-
+            mWebView.loadUrl("http://202.111.178.10:12380/globe.html?userId=$userId&loginStatus=$loginStatus&productId=$productId")
         }
         mWebView.registerHandler("videoPlay", BridgeHandler { data, function ->
 
@@ -89,6 +93,17 @@ class EarthFragment : Fragment() {
                 mLoginLayout.visibility = View.VISIBLE
             }
         })
-//        startActivity<VideoPlayerActivity>()
+        mWebView.registerHandler("showThematicReport", BridgeHandler { data, function ->
+
+            println("data$data")
+            if (data != ""){
+                val intent = Intent(activity, PdfViewerActivity::class.java)
+                val bundle = Bundle()
+                bundle.putString("URL", data)
+                intent.putExtras(bundle)
+                startActivity(intent)
+            }
+        })
+        sp.edit().clear().commit()
     }
 }

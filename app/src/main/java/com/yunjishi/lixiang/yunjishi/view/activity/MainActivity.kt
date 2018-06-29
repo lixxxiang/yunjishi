@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 //        startActivity<VideoPlayerActivity>()
-        startActivity<PdfViewerActivity>()
+//        startActivity<PdfViewerActivity>()
     }
 
     private fun initLogout() {
@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() {
                 mUploadMessage = uploadMsg
             }
         }
-        mLogoutWebView.loadUrl("http://10.10.90.14:8088/logout.html")
+        mLogoutWebView.loadUrl("http://202.111.178.10:12380/logout.html")
         mLogoutWebView.registerHandler("closeLoginPage", { data, function ->
             println("data$data")
             if (data == "closeLoginPage") {
@@ -107,6 +107,11 @@ class MainActivity : AppCompatActivity() {
                 mLogoutLayout.visibility = View.INVISIBLE
                 mDaoSession!!.userBean2Dao.deleteAll()
                 mAvatarImageView.setImageResource(R.drawable.ic_avatar)
+                val intent = intent
+                overridePendingTransition(0, 0)
+                finish()
+                overridePendingTransition(0, 0)
+                startActivity(intent)
             }
         })
     }
@@ -155,7 +160,7 @@ class MainActivity : AppCompatActivity() {
                 mUploadMessage = uploadMsg
             }
         }
-        mLoginWebView.loadUrl("http://10.10.90.14:8088/login.html")
+        mLoginWebView.loadUrl("http://202.111.178.10:12380/login.html")
         mLoginWebView.registerHandler("closeLoginPage", { data, function ->
             println("data$data")
             if (data == "closeLoginPage") {
@@ -165,6 +170,7 @@ class MainActivity : AppCompatActivity() {
         mLoginWebView.registerHandler("loginSuccess", { data, function ->
             println("data$data")
             userBean = Gson().fromJson(data, UserBean2::class.java)
+            println("userBean.userId" + userBean.userId)
             mDaoSession!!.userBean2Dao.insert(userBean)
             mLoginLayout.visibility = View.GONE
             mAvatarImageView.setImageResource(R.drawable.ic_avatar_login)
@@ -251,7 +257,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun changeFragment(position: Int) {
+    fun changeFragment(position: Int) {
         val manager = supportFragmentManager.beginTransaction()
         for (fragment in mStack) {
             manager.hide(fragment)

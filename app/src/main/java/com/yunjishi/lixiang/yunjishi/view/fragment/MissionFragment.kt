@@ -4,7 +4,10 @@ import android.Manifest
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Point
@@ -24,10 +27,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
-import android.widget.ZoomControls
+import android.widget.*
 import com.android.lixiang.base.database.UserProfile
 import com.android.lixiang.base.ui.fragment.BaseMvpFragment
 import com.android.lixiang.base.utils.view.DimenUtil
@@ -48,31 +48,12 @@ import com.yunjishi.lixiang.yunjishi.presenter.data.bean.SubmitOrderBean
 import com.yunjishi.lixiang.yunjishi.presenter.injection.component.DaggerMissionComponent
 import com.yunjishi.lixiang.yunjishi.presenter.injection.module.MissionModule
 import com.yunjishi.lixiang.yunjishi.presenter.view.MissionView
-import com.yunjishi.lixiang.yunjishi.service.MissionService
-import com.yunjishi.lixiang.yunjishi.view.activity.OrderDetailActivity
-import com.yunjishi.lixiang.yunjishi.view.activity.SelectRatioActivity
-import com.yunjishi.lixiang.yunjishi.view.activity.SelectTimeActivity
-import com.yunjishi.lixiang.yunjishi.view.activity.SelectTypeParamsActivity
+import com.yunjishi.lixiang.yunjishi.view.activity.*
 import com.yunjishi.lixiang.yunjishi.view.adapter.SelectParamsAdapter
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_mission.*
-import org.jetbrains.anko.support.v4.startActivity
 
-class MissionFragment() : BaseMvpFragment<MissionPresenter>(), MissionView, SensorEventListener, FragmentBackHandler {
+class MissionFragment : BaseMvpFragment<MissionPresenter>(), MissionView, SensorEventListener, FragmentBackHandler {
 
-    //    override fun onBackPressed(): Boolean {
-//        if (handleBackPressed) {
-//            //外理返回键
-//            return true;
-//        } else {
-//            // 如果不包含子Fragment
-//            // 或子Fragment没有外理back需求
-//            // 可如直接 return false;
-//            // 注：如果Fragment/Activity 中可以使用ViewPager 代替 this
-//            //
-//            return BackHandlerHelper.handleBackPress(this);
-//        }
-//    }
     var mUploadMessage: ValueCallback<Uri>? = null
     var mMapView: MapView? = null
     private var mBaiduMap: BaiduMap? = null
@@ -92,7 +73,14 @@ class MissionFragment() : BaseMvpFragment<MissionPresenter>(), MissionView, Sens
     private var scopeGeo = String()
     private var area: Double? = 0.0
     private var userId: String? = null
+    private var demandType: String? = null
+    private var demandGeo: String? = null
+    private var resolution: String? = null
+    private var startTime: String? = null
+    private var endTime: String? = null
+    private var timesParam: String? = null
     private var handleBackPressed = true
+    var mSharedPreferences: SharedPreferences? = null
 
     var titleList: MutableList<String>? = mutableListOf()
     var subTitleList: MutableList<String>? = mutableListOf()
@@ -111,6 +99,11 @@ class MissionFragment() : BaseMvpFragment<MissionPresenter>(), MissionView, Sens
     var flag4 = false
     var pageIndex = 0
 
+    override fun onAttach(activity: Activity?) {
+        super.onAttach(activity)
+        userId = (activity as MainActivity).getUserID()
+    }
+
     override fun injectComponent() {
         DaggerMissionComponent.builder().fragmentComponent(fragmentComponent)
                 .missionModule(MissionModule())
@@ -118,7 +111,11 @@ class MissionFragment() : BaseMvpFragment<MissionPresenter>(), MissionView, Sens
     }
 
     override fun onSubmitOrderResult(res: SubmitOrderBean) {
-        println("res$res")
+        println("onSubmitOrderResult$res")
+        mOrderWebViewReletiveLayout.visibility = View.VISIBLE
+        pageIndex = 3
+        mOrderWebView.reload()
+
     }
 
     override fun onBackPressed(): Boolean {
@@ -132,16 +129,20 @@ class MissionFragment() : BaseMvpFragment<MissionPresenter>(), MissionView, Sens
             }
             1 -> {
                 println("--1")
-
                 pageIndex = 0
                 mMapViewRelativeLayout.visibility = View.GONE
                 return true
             }
             2 -> {
                 println("--2")
-
                 pageIndex = 1
                 mSelectParamsRelativeLayout.visibility = View.GONE
+                return true
+            }
+            3 -> {
+                println("--3")
+                pageIndex = 2
+                mOrderWebViewReletiveLayout.visibility = View.GONE
                 return true
             }
             else -> {
@@ -191,16 +192,32 @@ class MissionFragment() : BaseMvpFragment<MissionPresenter>(), MissionView, Sens
 
         mMissionFeild1.setOnClickListener {
             pageIndex = 1
-            mMapViewRelativeLayout.visibility = View.VISIBLE
+            if (userId != "-1") {
+                mMapViewRelativeLayout.visibility = View.VISIBLE
+            } else {
+                var mLoginLayout = activity!!.findViewById<LinearLayout>(R.id.mLoginLayout)
+                mLoginLayout.visibility = View.VISIBLE
+            }
+
         }
 
         mMissionFeild2.setOnClickListener {
-            mOrderWebViewReletiveLayout.visibility = View.VISIBLE
+            pageIndex = 3
+            if (userId != "-1")
+                mOrderWebViewReletiveLayout.visibility = View.VISIBLE
+            else {
+                var mLoginLayout = activity!!.findViewById<LinearLayout>(R.id.mLoginLayout)
+                mLoginLayout.visibility = View.VISIBLE
+            }
+
         }
 
         mCameraImageView.setOnClickListener {
             pageIndex = 2
-            mSelectParamsRelativeLayout.visibility = View.VISIBLE
+            if (scopeGeo == "") {
+                Toast.makeText(activity, "请选择区域", Toast.LENGTH_SHORT).show()
+            } else
+                mSelectParamsRelativeLayout.visibility = View.VISIBLE
         }
 
         mZoomInButton.setOnClickListener {
@@ -213,16 +230,20 @@ class MissionFragment() : BaseMvpFragment<MissionPresenter>(), MissionView, Sens
             mBaiduMap!!.animateMapStatus(zoomOut)
         }
 
-        mOrderWebViewToolbar.setNavigationOnClickListener {
-            mOrderWebViewReletiveLayout.visibility = View.GONE
-        }
+//        mOrderWebViewToolbar.setNavigationOnClickListener {
+//            mOrderWebViewReletiveLayout.visibility = View.GONE
+//        }
     }
 
+
     private fun initOrder() {
-        mOrderWebViewToolbar.title = "我的订单"
-        (activity as AppCompatActivity).setSupportActionBar(mOrderWebViewToolbar)
+//        mOrderWebViewToolbar.title = "我的订单"
+//        (activity as AppCompatActivity).setSupportActionBar(mOrderWebViewToolbar)
         (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         mOrderWebView.setBackgroundColor(0);
+//        mOrderWebViewToolbar.setNavigationOnClickListener {
+//            mOrderWebViewReletiveLayout.visibility = View.INVISIBLE
+//        }
         mOrderWebView.setDefaultHandler(DefaultHandler())
         mOrderWebView.webChromeClient = object : WebChromeClient() {
 
@@ -238,18 +259,33 @@ class MissionFragment() : BaseMvpFragment<MissionPresenter>(), MissionView, Sens
                 mUploadMessage = uploadMsg
             }
         }
-        mOrderWebView.loadUrl("http://10.10.90.40/demand.html?userId=123456")
+        com.orhanobut.logger.Logger.d("http://202.111.178.10:12380/demand.html?userId=$userId")
+        mOrderWebView.loadUrl("http://202.111.178.10:12380/demand.html?userId=$userId")
         mOrderWebView.registerHandler("demandShow", BridgeHandler { data, function ->
-//            Toast.makeText(activity, data, Toast.LENGTH_SHORT).show()
-            if (data!= null){
+            println("demandId$data")
+            if (data != null) {
                 val intent = Intent(activity, OrderDetailActivity::class.java)
                 val bundle = Bundle()
                 bundle.putString("DEMAND_ID", data)
+                bundle.putString("USER_ID", userId)
                 intent.putExtras(bundle)
                 startActivity(intent)
             }
         })
-
+        mOrderWebView.registerHandler("productShow", BridgeHandler { data, function ->
+            println("productId$data")
+            if (data != null) {
+                mSharedPreferences = activity!!.getSharedPreferences("XXX", Context.MODE_PRIVATE)
+                val editor = mSharedPreferences!!.edit()
+                editor.putString("PRODUCT_ID", data)
+                editor.commit()
+                val intent = activity!!.intent
+                activity!!.overridePendingTransition(0, 0)
+                activity!!.finish()
+                activity!!.overridePendingTransition(0, 0)
+                startActivity(intent)
+            }
+        })
     }
 
 
@@ -295,14 +331,12 @@ class MissionFragment() : BaseMvpFragment<MissionPresenter>(), MissionView, Sens
         }
 
         mDoneTextView.setOnClickListener {
-            startActivity<OrderDetailActivity>()
+            mPresenter.mView = this
+            println(userId!! + "  " + demandType!! + "  " + demandGeo!!
+                    + "  " + resolution!! + "  " + startTime!! + "  " + endTime!! + "  " + timesParam!!)
+            mPresenter.submitOrder(userId!!, demandType!!, demandGeo!!
+                    , resolution!!, startTime!!, endTime!!, timesParam!!)
 
-//            mPresenter.mView = this
-//            mPresenter.submitOrder("123456", "0", "{         \"type\": \"Polygon\",         \"coordinates\": [           [             [               -157.67578125,               74.16408546675687             ],             [               -155.56640625,               74.16408546675687             ],             [               -155.56640625,               74.6367480410086             ],             [               -157.67578125,               74.6367480410086             ],             [               -157.67578125,               74.16408546675687             ]           ]         ]       }"
-//                    , "<1m", "2018.01.10", "2018.06.10", "2")
-
-//            val profile = UserProfile(userId, "lixiang", "", "", "13331749289", "", "", "")
-//            DatabaseManager().getInstance()!!.getDao()!!.insert(profile)
         }
     }
 
@@ -322,11 +356,13 @@ class MissionFragment() : BaseMvpFragment<MissionPresenter>(), MissionView, Sens
             arg0.dismiss()
             if (times != "") {
                 detailList!![3] = times
+                timesParam = times
                 TIMES = times
                 flag4 = true
                 adapter!!.notifyDataSetChanged()
             } else if (times == "" && TIMES != "") {
                 detailList!![3] = TIMES
+                timesParam = TIMES
                 TIMES = times
                 flag4 = true
                 adapter!!.notifyDataSetChanged()
@@ -351,6 +387,7 @@ class MissionFragment() : BaseMvpFragment<MissionPresenter>(), MissionView, Sens
                 flag1 = true
                 adapter!!.notifyDataSetChanged()
                 checkDone()
+                demandType = typeIndex.toString()
             }
         } else if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK) {
             val detail = data!!.getStringExtra("RATIO")
@@ -359,6 +396,7 @@ class MissionFragment() : BaseMvpFragment<MissionPresenter>(), MissionView, Sens
                 detailList!![1] = ratioList!![detail.toInt()]
                 flag2 = true
                 adapter!!.notifyDataSetChanged()
+                resolution = ratioList!![detail.toInt()]
                 checkDone()
             }
         } else if (requestCode == 2 && resultCode == AppCompatActivity.RESULT_OK) {
@@ -368,6 +406,8 @@ class MissionFragment() : BaseMvpFragment<MissionPresenter>(), MissionView, Sens
                 detailList!![2] = detail
                 flag3 = true
                 adapter!!.notifyDataSetChanged()
+                startTime = detail.split("-")[0]
+                endTime = detail.split("-")[1]
                 checkDone()
             }
         }
@@ -422,22 +462,17 @@ class MissionFragment() : BaseMvpFragment<MissionPresenter>(), MissionView, Sens
         println(DimenUtil().px2dip(activity!!, height.toFloat()))
         println(DimenUtil().px2dip(activity!!, width.toFloat()))
 
-        task = object : Runnable {
-            override fun run() {
-                // TODO Auto-generated method stub
-//                val curTranslationY = mScanImageView!!.translationY
-//                handler.postDelayed(this, 5 * 1000)
-//                println("mScanImageView!!.translationY$curTranslationY")
-                val animator: ObjectAnimator = ObjectAnimator.ofFloat(mScanImageView!!,
-                        "translationY",
-                        0F,
-                        DimenUtil().dip2px(activity!!, 396F).toFloat(),
-                        0F)
-                animator.duration = 5000
-                animator.repeatCount = ValueAnimator.INFINITE//无限循环
-                animator.repeatMode = ValueAnimator.INFINITE//
-                animator.start()
-            }
+        task = Runnable {
+            // TODO Auto-generated method stub
+            val animator: ObjectAnimator = ObjectAnimator.ofFloat(mScanImageView!!,
+                    "translationY",
+                    0F,
+                    DimenUtil().dip2px(activity!!, 396F).toFloat(),
+                    0F)
+            animator.duration = 5000
+            animator.repeatCount = ValueAnimator.INFINITE//无限循环
+            animator.repeatMode = ValueAnimator.INFINITE//
+            animator.start()
         }
 
         handler.post(task)
@@ -484,41 +519,40 @@ class MissionFragment() : BaseMvpFragment<MissionPresenter>(), MissionView, Sens
             override fun onMapStatusChangeStart(p0: MapStatus?, p1: Int) {}
             override fun onMapStatusChange(p0: MapStatus?) {}
             override fun onMapStatusChangeFinish(p0: MapStatus?) {
-                Handler().postDelayed({
 
-                    if (context != null) {
-                        val ltp = Point()
-                        ltp.x = DimenUtil().dip2px(context!!, 356.5F)
-                        ltp.y = DimenUtil().dip2px(context!!, 105F)
-                        val lt = mBaiduMap!!.projection.fromScreenLocation(ltp)
+                if (context != null) {
+                    val ltp = Point()
+                    ltp.x = DimenUtil().dip2px(context!!, 356.5F)
+                    ltp.y = DimenUtil().dip2px(context!!, 105F)
+                    val lt = mBaiduMap!!.projection.fromScreenLocation(ltp)
 
-                        val rbp = Point()
-                        rbp.x = DimenUtil().dip2px(context!!, 782.5F)
-                        rbp.y = DimenUtil().dip2px(context!!, 531F)
-                        val rb = mBaiduMap!!.projection.fromScreenLocation(rbp)
+                    val rbp = Point()
+                    rbp.x = DimenUtil().dip2px(context!!, 782.5F)
+                    rbp.y = DimenUtil().dip2px(context!!, 531F)
+                    val rb = mBaiduMap!!.projection.fromScreenLocation(rbp)
 
-                        if (mBaiduMap!!.projection != null) {
-                            geoString = String.format("%s,%s,%s,%s", lt.longitude, lt.latitude, rb.longitude, rb.latitude)
-                            println("geoString$geoString")
-                            scopeGeo = geoFormat(geoString)
-                            center = String.format("%s,%s", (lt.longitude + rb.longitude) / 2, (lt.latitude + rb.latitude) / 2)
-                            val leftTop = LatLng(lt.latitude, lt.longitude)
-                            val rightBottom = LatLng(rb.latitude, rb.longitude)
-                            area = DistanceUtil.getDistance(leftTop, rightBottom) * DistanceUtil.getDistance(leftTop, rightBottom) / 1000000
-                            val areaString = area.toString()
-                            val temp = areaString.substring(0, areaString.indexOf(".") + 3)
-                            if (areaString.contains("E")) {
-                                if (areaString.contains("-")) {
-                                    mAreaTextView!!.text = String.format("当前面积：小于 0.01平方公里", temp)
-                                } else
-                                    mAreaTextView!!.text = String.format("当前面积：%s 亿平方公里", temp)
-                            } else {
-                                mAreaTextView!!.text = String.format("当前面积：%s 平方公里", temp)
-                            }
+                    if (mBaiduMap!!.projection != null) {
+                        geoString = String.format("%s,%s,%s,%s", lt.longitude, lt.latitude, rb.longitude, rb.latitude)
+                        println("geoString$geoString")
+                        scopeGeo = geoFormat(geoString)
+                        demandGeo = scopeGeo
+                        println("scopeGeo$scopeGeo")
+                        center = String.format("%s,%s", (lt.longitude + rb.longitude) / 2, (lt.latitude + rb.latitude) / 2)
+                        val leftTop = LatLng(lt.latitude, lt.longitude)
+                        val rightBottom = LatLng(rb.latitude, rb.longitude)
+                        area = DistanceUtil.getDistance(leftTop, rightBottom) * DistanceUtil.getDistance(leftTop, rightBottom) / 1000000
+                        val areaString = area.toString()
+                        val temp = areaString.substring(0, areaString.indexOf(".") + 3)
+                        if (areaString.contains("E")) {
+                            if (areaString.contains("-")) {
+                                mAreaTextView!!.text = String.format("当前面积：小于 0.01平方公里", temp)
+                            } else
+                                mAreaTextView!!.text = String.format("当前面积：%s 亿平方公里", temp)
+                        } else {
+                            mAreaTextView!!.text = String.format("当前面积：%s 平方公里", temp)
                         }
                     }
-
-                }, 1000)
+                }
             }
         }
         mMapView!!.map.setOnMapStatusChangeListener(listener)
@@ -624,5 +658,9 @@ class MissionFragment() : BaseMvpFragment<MissionPresenter>(), MissionView, Sens
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        initMap()
+    }
 
 }

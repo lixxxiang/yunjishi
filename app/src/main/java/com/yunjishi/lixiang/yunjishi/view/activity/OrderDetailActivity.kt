@@ -62,7 +62,7 @@ class OrderDetailActivity : BaseMvpActivity<OrderDetailPresenter>(), OrderDetail
         }
         val polygonOption = PolygonOptions()
                 .points(pts)
-                .stroke(Stroke(1, Color.parseColor("#F56161")))
+                .stroke(Stroke(10, Color.parseColor("#F56161")))
                 .fillColor(Color.parseColor("#00000000"))
 
         mBaiduMap!!.addOverlay(polygonOption)
@@ -87,7 +87,7 @@ class OrderDetailActivity : BaseMvpActivity<OrderDetailPresenter>(), OrderDetail
         val intent = intent
         val bundle = intent.extras
         demandId = bundle.getString("DEMAND_ID")
-        mPresenter.getDemandDetail("123456", demandId.toString())
+        mPresenter.getDemandDetail(bundle.getString("USER_ID"), demandId.toString())
 
         initView()
 

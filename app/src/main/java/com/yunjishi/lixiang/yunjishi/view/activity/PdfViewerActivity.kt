@@ -78,13 +78,13 @@ class PdfViewerActivity : AppCompatActivity(), DownloadFile.Listener {
 
         mPdfToolbar.title = "详情"
         setSupportActionBar(mPdfToolbar)
+
+
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-//        btn_download.setOnClickListener {
-        remotePDFViewPager = RemotePDFViewPager(this, "http://202.111.178.10/unzip/thematic/石河子长势同期对比201706/石河子作物长势监测产品06com.pdf", this)
+        remotePDFViewPager = RemotePDFViewPager(this, intent.extras.getString("URL"), this)
         remotePDFViewPager.id = R.id.pdfViewPager
         remote_pdf_root.addView(remotePDFViewPager,
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
-//        }
         mPdfToolbar.setNavigationOnClickListener {
             this.finish()
         }

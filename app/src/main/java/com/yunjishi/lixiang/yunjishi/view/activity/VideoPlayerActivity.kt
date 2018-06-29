@@ -28,14 +28,14 @@ class VideoPlayerActivity : AppCompatActivity() {
 //                JZVideoPlayerStandard.SCREEN_WINDOW_NORMAL,
 //                "")
         if (Vitamio.isInitialized(this)) {
-//            videoview!!.setVideoPath(intent.extras.getString("URL"))
-                        videoview!!.setVideoPath("http://202.111.178.10/unzip/video/长滩1/长滩1.mp4")
+            videoview!!.setVideoPath(intent.extras.getString("URL"))
+//                        videoview!!.setVideoPath("http://202.111.178.10/unzip/video/长滩1/长滩1.mp4")
 
             videoview!!.setMediaController(MediaController(this))
             videoview!!.start()
         }
 
-        mVideoPlayerToolbar.title = ""
+        mVideoPlayerToolbar.title = "视频"
         setSupportActionBar(mVideoPlayerToolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
