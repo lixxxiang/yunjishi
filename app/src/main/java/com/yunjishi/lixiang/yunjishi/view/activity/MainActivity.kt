@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
     var userBean = UserBean2()
     private var intentFilter: IntentFilter? = null
     private var networkChangeReceiver: NetworkChangeReceiver? = null
-
+    var mactivity: MainActivity?= null
     fun getDaoSession(): DaoSession {
         return mDaoSession!!
     }
@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
+        mactivity = this
         StatusBarUtil.setColor(this, Color.parseColor("#262626"), 0)
 
         checkAccess()
