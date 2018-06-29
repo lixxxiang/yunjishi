@@ -76,6 +76,7 @@ class EarthFragment : Fragment() {
         }else{
             mWebView.loadUrl("http://202.111.178.10:12380/globe.html?userId=$userId&loginStatus=$loginStatus&productId=$productId")
         }
+        mWebView.reload()
         mWebView.registerHandler("videoPlay", BridgeHandler { data, function ->
 
             println("data$data")

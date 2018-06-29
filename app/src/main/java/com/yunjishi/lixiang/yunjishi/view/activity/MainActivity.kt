@@ -1,6 +1,7 @@
 package com.yunjishi.lixiang.yunjishi.view.activity
 
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Color
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
@@ -30,12 +31,17 @@ import com.yunjishi.lixiang.yunjishi.view.fragment.LoginFragment
 import kotlinx.android.synthetic.main.fragment_earth.*
 import org.greenrobot.greendao.database.Database
 import org.jetbrains.anko.startActivity
+import com.yunjishi.lixiang.yunjishi.NetworkChangeReceiver
+import com.yunjishi.lixiang.yunjishi.test
 
 
 class MainActivity : AppCompatActivity() {
     var mUploadMessage: ValueCallback<Uri>? = null
     var mDaoSession: DaoSession? = null
     var userBean = UserBean2()
+    private var intentFilter: IntentFilter? = null
+    private var networkChangeReceiver: NetworkChangeReceiver? = null
+
     fun getDaoSession(): DaoSession {
         return mDaoSession!!
     }
@@ -46,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         StatusBarUtil.setColor(this, Color.parseColor("#262626"), 0)
 
-
+        checkAccess()
         initDao()
         initFragment()
         initLogin()
@@ -61,12 +67,14 @@ class MainActivity : AppCompatActivity() {
                 mLogoutLayout.visibility = View.VISIBLE
             } else
                 mLoginLayout.visibility = View.VISIBLE
-//            var userBean: UserBean = UserBean("1","lx","133","123")
-//            mDaoSession!!.userBeanDao.insert(userBean)
         }
+    }
 
-//        startActivity<VideoPlayerActivity>()
-//        startActivity<PdfViewerActivity>()
+    private fun checkAccess() {
+        intentFilter = IntentFilter();
+        intentFilter!!.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        networkChangeReceiver = NetworkChangeReceiver();
+        registerReceiver(networkChangeReceiver, intentFilter);
     }
 
     private fun initLogout() {
@@ -274,6 +282,11 @@ class MainActivity : AppCompatActivity() {
         if (!BackHandlerHelper.handleBackPress(this)) {
             super.onBackPressed()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(networkChangeReceiver)
     }
 }
 
