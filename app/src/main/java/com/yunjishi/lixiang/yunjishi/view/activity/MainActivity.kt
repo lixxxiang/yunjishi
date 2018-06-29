@@ -165,6 +165,9 @@ class MainActivity : AppCompatActivity() {
             println("data$data")
             if (data == "closeLoginPage") {
                 mLoginLayout.visibility = View.GONE
+
+
+
             }
         })
         mLoginWebView.registerHandler("loginSuccess", { data, function ->
