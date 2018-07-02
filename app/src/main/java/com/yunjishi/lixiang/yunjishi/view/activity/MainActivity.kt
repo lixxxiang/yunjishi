@@ -1,5 +1,7 @@
 package com.yunjishi.lixiang.yunjishi.view.activity
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
@@ -10,8 +12,6 @@ import android.support.v4.app.Fragment
 import android.view.View
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
-import android.widget.Toast
-import com.android.lixiang.base.database.DatabaseManager
 import com.android.lixiang.base.utils.view.StatusBarUtil
 import com.yunjishi.lixiang.yunjishi.R
 import com.yunjishi.lixiang.yunjishi.view.fragment.EarthFragment
@@ -19,31 +19,43 @@ import com.yunjishi.lixiang.yunjishi.view.fragment.MissionFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import com.github.ikidou.fragmentBackHandler.BackHandlerHelper
-import com.github.lzyzsd.jsbridge.BridgeHandler
 import com.github.lzyzsd.jsbridge.DefaultHandler
 import com.google.gson.Gson
-import com.yunjishi.lixiang.yunjishi.presenter.data.bean.UserBean
 import com.yunjishi.lixiang.yunjishi.presenter.data.bean.UserBean2
 import com.yunjishi.lixiang.yunjishi.presenter.database.DaoMaster
 import com.yunjishi.lixiang.yunjishi.presenter.database.DaoSession
-import com.yunjishi.lixiang.yunjishi.presenter.database.UserBeanDao
 import com.yunjishi.lixiang.yunjishi.view.fragment.LoginFragment
-import kotlinx.android.synthetic.main.fragment_earth.*
 import org.greenrobot.greendao.database.Database
-import org.jetbrains.anko.startActivity
 import com.yunjishi.lixiang.yunjishi.NetworkChangeReceiver
-import com.yunjishi.lixiang.yunjishi.test
-
 
 class MainActivity : AppCompatActivity() {
+
+
+    var broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            mNoAccessRelativeLayout.visibility = View.VISIBLE
+        }
+    }
+
+    var broadcastReceiver2: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            mNoAccessRelativeLayout.visibility = View.INVISIBLE
+        }
+    }
     var mUploadMessage: ValueCallback<Uri>? = null
     var mDaoSession: DaoSession? = null
     var userBean = UserBean2()
     private var intentFilter: IntentFilter? = null
     private var networkChangeReceiver: NetworkChangeReceiver? = null
-    var mactivity: MainActivity?= null
+    var mactivity: MainActivity? = null
     fun getDaoSession(): DaoSession {
         return mDaoSession!!
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkAccess()
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,7 +65,9 @@ class MainActivity : AppCompatActivity() {
         mactivity = this
         StatusBarUtil.setColor(this, Color.parseColor("#262626"), 0)
 
-        checkAccess()
+        registerReceiver(broadcastReceiver,  IntentFilter("NO_ACCESS"))
+        registerReceiver(broadcastReceiver2,  IntentFilter("ACCESS"))
+
         initDao()
         initFragment()
         initLogin()
@@ -61,6 +75,7 @@ class MainActivity : AppCompatActivity() {
         checkLogin()
         initNavigationView()
         changeFragment(0)
+
 
         mAvatarImageView.setOnClickListener {
             println(checkLogin())
@@ -72,10 +87,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkAccess() {
-        intentFilter = IntentFilter();
-        intentFilter!!.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-        networkChangeReceiver = NetworkChangeReceiver();
-        registerReceiver(networkChangeReceiver, intentFilter);
+        intentFilter = IntentFilter()
+        intentFilter!!.addAction("android.net.conn.CONNECTIVITY_CHANGE")
+//        var dianLiangBR = NetworkChangeReceiver()
+        networkChangeReceiver = NetworkChangeReceiver()
+        registerReceiver(networkChangeReceiver, intentFilter)
+//        dianLiangBR.setBRInteractionListener(this)
+
     }
 
     private fun initLogout() {
@@ -174,7 +192,6 @@ class MainActivity : AppCompatActivity() {
             println("data$data")
             if (data == "closeLoginPage") {
                 mLoginLayout.visibility = View.GONE
-
 
 
             }

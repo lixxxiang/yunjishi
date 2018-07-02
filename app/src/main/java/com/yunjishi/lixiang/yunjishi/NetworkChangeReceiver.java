@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.widget.Toast;
 
-import com.yunjishi.lixiang.yunjishi.view.activity.MainActivity;
 
 public class NetworkChangeReceiver extends BroadcastReceiver {
     @Override
@@ -15,10 +13,10 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isAvailable()) {
-
-            Toast.makeText(context, "当前网络可用", Toast.LENGTH_SHORT).show();
+            context.sendBroadcast(new Intent("ACCESS"));
         } else {
-            Toast.makeText(context, "当前网络不可用", Toast.LENGTH_SHORT).show();
+            context.sendBroadcast(new Intent("NO_ACCESS"));
         }
     }
+
 }
