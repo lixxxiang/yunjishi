@@ -27,6 +27,7 @@ import com.yunjishi.lixiang.yunjishi.presenter.database.DaoSession
 import com.yunjishi.lixiang.yunjishi.view.fragment.LoginFragment
 import org.greenrobot.greendao.database.Database
 import com.yunjishi.lixiang.yunjishi.NetworkChangeReceiver
+import com.yunjishi.lixiang.yunjishi.view.fragment.MapFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -74,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         initLogout()
         checkLogin()
         initNavigationView()
-        changeFragment(0)
+        changeFragment(2)
 
 
         mAvatarImageView.setOnClickListener {
@@ -230,16 +231,19 @@ class MainActivity : AppCompatActivity() {
     private val mLoginFragment by lazy { LoginFragment() }
     private val mEarthFragment by lazy { EarthFragment() }
     private val mMissionFragment by lazy { MissionFragment() }
+    private val mMapFragment by lazy { MapFragment() }
 
     private fun initFragment() {
         val manager = supportFragmentManager.beginTransaction()
 //        manager.add(R.id.mFrameLayout,mLoginFragment)
         manager.add(R.id.mFrameLayout, mEarthFragment)
         manager.add(R.id.mFrameLayout, mMissionFragment)
+        manager.add(R.id.mFrameLayout, mMapFragment)
         manager.commit()
 //        mStack.add(mLoginFragment)
         mStack.add(mEarthFragment)
         mStack.add(mMissionFragment)
+        mStack.add(mMapFragment)
     }
 
     private fun initNavigationView() {
@@ -281,6 +285,7 @@ class MainActivity : AppCompatActivity() {
             mEarthTextView.setTextColor(Color.parseColor("#FFFFFF"))
             mMissionTextView.setTextColor(Color.parseColor("#FFFFFF"))
             mSearchTextView.setTextColor(Color.parseColor("#738FFE"))
+            changeFragment(2)
 
         }
 

@@ -17,7 +17,6 @@ class BaseApplication: Application(){
         SDKInitializer.initialize(applicationContext)
         initAppInjection()
 //        DatabaseManager().getInstance()!!.init(this)
-
     }
 
     private fun initAppInjection() {
