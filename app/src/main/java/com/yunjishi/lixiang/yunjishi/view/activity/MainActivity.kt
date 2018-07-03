@@ -14,20 +14,17 @@ import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import com.android.lixiang.base.utils.view.StatusBarUtil
 import com.yunjishi.lixiang.yunjishi.R
-import com.yunjishi.lixiang.yunjishi.view.fragment.EarthFragment
-import com.yunjishi.lixiang.yunjishi.view.fragment.MissionFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import com.github.ikidou.fragmentBackHandler.BackHandlerHelper
 import com.github.lzyzsd.jsbridge.DefaultHandler
 import com.google.gson.Gson
+import com.yunjishi.lixiang.yunjishi.NetworkChangeReceiver
 import com.yunjishi.lixiang.yunjishi.presenter.data.bean.UserBean2
 import com.yunjishi.lixiang.yunjishi.presenter.database.DaoMaster
 import com.yunjishi.lixiang.yunjishi.presenter.database.DaoSession
-import com.yunjishi.lixiang.yunjishi.view.fragment.LoginFragment
 import org.greenrobot.greendao.database.Database
-import com.yunjishi.lixiang.yunjishi.NetworkChangeReceiver
-import com.yunjishi.lixiang.yunjishi.view.fragment.MapFragment
+import com.yunjishi.lixiang.yunjishi.view.fragment.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -231,19 +228,27 @@ class MainActivity : AppCompatActivity() {
     private val mLoginFragment by lazy { LoginFragment() }
     private val mEarthFragment by lazy { EarthFragment() }
     private val mMissionFragment by lazy { MissionFragment() }
+    private val mDefaultFragment by lazy { DefaultFragment() }
     private val mMapFragment by lazy { MapFragment() }
+    private val mParamsFragment by lazy { ParamsFragment() }
 
     private fun initFragment() {
         val manager = supportFragmentManager.beginTransaction()
 //        manager.add(R.id.mFrameLayout,mLoginFragment)
         manager.add(R.id.mFrameLayout, mEarthFragment)
         manager.add(R.id.mFrameLayout, mMissionFragment)
+        manager.add(R.id.mFrameLayout, mDefaultFragment)
         manager.add(R.id.mFrameLayout, mMapFragment)
+        manager.add(R.id.mFrameLayout, mParamsFragment)
+
         manager.commit()
 //        mStack.add(mLoginFragment)
         mStack.add(mEarthFragment)
         mStack.add(mMissionFragment)
+        mStack.add(mDefaultFragment)
         mStack.add(mMapFragment)
+        mStack.add(mParamsFragment)
+
     }
 
     private fun initNavigationView() {

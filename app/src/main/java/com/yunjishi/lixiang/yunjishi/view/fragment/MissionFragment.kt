@@ -41,6 +41,8 @@ import com.github.ikidou.fragmentBackHandler.BackHandlerHelper
 import com.github.ikidou.fragmentBackHandler.FragmentBackHandler
 import com.github.lzyzsd.jsbridge.BridgeHandler
 import com.github.lzyzsd.jsbridge.DefaultHandler
+import com.orhanobut.logger.Logger
+import com.yunjishi.lixiang.yunjishi.GetArea
 
 import com.yunjishi.lixiang.yunjishi.R
 import com.yunjishi.lixiang.yunjishi.presenter.MissionPresenter
@@ -540,7 +542,17 @@ class MissionFragment : BaseMvpFragment<MissionPresenter>(), MissionView, Sensor
                         center = String.format("%s,%s", (lt.longitude + rb.longitude) / 2, (lt.latitude + rb.latitude) / 2)
                         val leftTop = LatLng(lt.latitude, lt.longitude)
                         val rightBottom = LatLng(rb.latitude, rb.longitude)
-                        area = DistanceUtil.getDistance(leftTop, rightBottom) * DistanceUtil.getDistance(leftTop, rightBottom) / 1000000
+                        val leftBottom = LatLng(rb.latitude, lt.longitude)
+                        val rightTop = LatLng(lt.latitude, rb.longitude)
+                        var list:MutableList<LatLng> = mutableListOf()
+                        list.add(leftTop)
+                        list.add(rightTop)
+                        list.add(rightBottom)
+                        list.add(leftBottom)
+
+                        Logger.d(GetArea.getArea(list))
+                        println(GetArea.getArea(list))
+                        area = DistanceUtil.getDistance(leftTop, rightBottom) * DistanceUtil.getDistance(leftTop, rightBottom) / 2000000
                         val areaString = area.toString()
                         val temp = areaString.substring(0, areaString.indexOf(".") + 3)
                         if (areaString.contains("E")) {

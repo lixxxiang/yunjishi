@@ -25,7 +25,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/mSelectTypeParamsToolbar"
-            android:layout_marginTop="40dp"
             android:background="#000000">
 
             <RelativeLayout
@@ -38,7 +37,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#000000"
-                    android:divider="@drawable/list_item_divider_2"
+                    android:divider="@drawable/list_item_divider"
                     android:dividerHeight="2px"/>
             </RelativeLayout>
 

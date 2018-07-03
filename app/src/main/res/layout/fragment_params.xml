@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:id="@+id/mParamsRelativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#000000">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/mParamsToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/actionBarSize"
+                android:background="#000000"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp"
+                app:contentInsetStartWithNavigation="0dp"
+                app:titleTextAppearance="@style/Toolbar.TitleText">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="48dp"
+                    android:layout_marginTop="12dp">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/mParamsDoneTextView"
+                        android:visibility="invisible"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="完成"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14dp" />
+                </RelativeLayout>
+            </android.support.v7.widget.Toolbar>
+
+            <com.android.lixiang.base.utils.view.BounceScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/mParamsToolbar"
+                android:background="#000000">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#000000">
+
+                    <com.android.lixiang.base.utils.view.CommentListView
+                        android:id="@+id/mParamsListView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#000000"
+                        android:divider="@drawable/list_item_divider_2"
+                        android:dividerHeight="2px" />
+                </RelativeLayout>
+
+            </com.android.lixiang.base.utils.view.BounceScrollView>
+        </RelativeLayout>
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>
