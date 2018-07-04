@@ -1,6 +1,7 @@
 package com.yunjishi.lixiang.yunjishi.view.fragment
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -32,7 +33,7 @@ import com.yunjishi.lixiang.yunjishi.view.adapter.SelectParamsAdapter
 import kotlinx.android.synthetic.main.fragment_mission.*
 import kotlinx.android.synthetic.main.fragment_params.*
 
-class ParamsFragment: BaseMvpFragment<ParamsPresenter>(), ParamsView {
+class ParamsFragment : BaseMvpFragment<ParamsPresenter>(), ParamsView {
     override fun injectComponent() {
         DaggerParamsComponent.builder().fragmentComponent(fragmentComponent)
                 .paramsModule(ParamsModule())
@@ -41,7 +42,9 @@ class ParamsFragment: BaseMvpFragment<ParamsPresenter>(), ParamsView {
 
     override fun onSubmitOrderResult(res: SubmitOrderBean) {
         println("onSubmitOrderResult$res")
+        (activity as MainActivity).changeFragment(5)
     }
+
 
     private var titleList: MutableList<String>? = mutableListOf()
     private var subTitleList: MutableList<String>? = mutableListOf()
@@ -114,10 +117,13 @@ class ParamsFragment: BaseMvpFragment<ParamsPresenter>(), ParamsView {
         mParamsToolbar.title = "请选择拍摄时的参数"
         (activity as AppCompatActivity).setSupportActionBar(mParamsToolbar)
         (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-
+        mParamsToolbar.setNavigationOnClickListener {
+            (activity as MainActivity).changeFragment(2)
+        }
         adapter = SelectParamsAdapter(titleList, subTitleList, detailList, activity)
         mParamsListView.adapter = adapter
         mParamsToolbar.setNavigationOnClickListener {
+            (activity as MainActivity).changeFragment(3)
         }
 
         mParamsListView.setOnItemClickListener { parent, view, position, id ->
@@ -150,11 +156,15 @@ class ParamsFragment: BaseMvpFragment<ParamsPresenter>(), ParamsView {
         }
 
         mParamsDoneTextView.setOnClickListener {
+            val sp = activity!!.getSharedPreferences("GEO", Context.MODE_PRIVATE)
+            demandGeo = sp.getString("geo", "")
+
             mPresenter.mView = this
             println(userId!! + "  " + demandType!! + "  " + demandGeo!!
                     + "  " + resolution!! + "  " + startTime!! + "  " + endTime!! + "  " + timesParam!!)
             mPresenter.submitOrder(userId!!, demandType!!, demandGeo!!
                     , resolution!!, startTime!!, endTime!!, timesParam!!)
+            sp.edit().clear().commit()
         }
     }
 

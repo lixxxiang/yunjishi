@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         initLogout()
         checkLogin()
         initNavigationView()
-        changeFragment(2)
+        changeFragment(0)
 
 
         mAvatarImageView.setOnClickListener {
@@ -225,29 +225,29 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val mStack = Stack<Fragment>()
-    private val mLoginFragment by lazy { LoginFragment() }
     private val mEarthFragment by lazy { EarthFragment() }
     private val mMissionFragment by lazy { MissionFragment() }
     private val mDefaultFragment by lazy { DefaultFragment() }
     private val mMapFragment by lazy { MapFragment() }
     private val mParamsFragment by lazy { ParamsFragment() }
+    private val mOrderFragment by lazy { OrderFragment() }
 
     private fun initFragment() {
         val manager = supportFragmentManager.beginTransaction()
-//        manager.add(R.id.mFrameLayout,mLoginFragment)
         manager.add(R.id.mFrameLayout, mEarthFragment)
         manager.add(R.id.mFrameLayout, mMissionFragment)
         manager.add(R.id.mFrameLayout, mDefaultFragment)
         manager.add(R.id.mFrameLayout, mMapFragment)
         manager.add(R.id.mFrameLayout, mParamsFragment)
+        manager.add(R.id.mFrameLayout, mOrderFragment)
 
         manager.commit()
-//        mStack.add(mLoginFragment)
         mStack.add(mEarthFragment)
         mStack.add(mMissionFragment)
         mStack.add(mDefaultFragment)
         mStack.add(mMapFragment)
         mStack.add(mParamsFragment)
+        mStack.add(mOrderFragment)
 
     }
 
@@ -278,7 +278,7 @@ class MainActivity : AppCompatActivity() {
             mSearchTextView.setTextColor(Color.parseColor("#FFFFFF"))
             mLoginLayout.visibility = View.GONE
 
-            changeFragment(1)
+            changeFragment(2)
 
         }
 
@@ -290,7 +290,7 @@ class MainActivity : AppCompatActivity() {
             mEarthTextView.setTextColor(Color.parseColor("#FFFFFF"))
             mMissionTextView.setTextColor(Color.parseColor("#FFFFFF"))
             mSearchTextView.setTextColor(Color.parseColor("#738FFE"))
-            changeFragment(2)
+//            changeFragment(2)
 
         }
 

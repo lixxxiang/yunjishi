@@ -2,6 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/mMapFragmentRelativeLayout"
     android:layout_width="match_parent"
-    android:background="#00000000"
+    android:background="#2F2F2F"
     android:layout_height="match_parent">
 </RelativeLayout>

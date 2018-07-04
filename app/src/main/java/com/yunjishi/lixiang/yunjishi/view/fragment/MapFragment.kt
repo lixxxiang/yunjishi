@@ -1,12 +1,23 @@
 package com.yunjishi.lixiang.yunjishi.view.fragment
 
+import android.Manifest
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Point
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.support.annotation.RequiresApi
+import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.AppCompatButton
@@ -26,7 +37,26 @@ import com.yunjishi.lixiang.yunjishi.GetArea
 import com.yunjishi.lixiang.yunjishi.view.activity.MainActivity
 import kotlinx.android.synthetic.main.fragment_map.*
 
-class MapFragment : Fragment(), View.OnClickListener {
+class MapFragment : Fragment(), View.OnClickListener, SensorEventListener {
+    private var lastX: Double? = 0.0
+    private var locData: MyLocationData? = null
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        val x = event!!.values[SensorManager.DATA_X].toDouble()
+        if (Math.abs(x - lastX!!) > 1.0) {
+            mCurrentDirection = x.toInt()
+            locData = MyLocationData.Builder()
+                    .accuracy(0F)
+                    .direction(mCurrentDirection.toFloat()).latitude(mCurrentLat)
+                    .longitude(mCurrentLon).build()
+            mBaiduMap!!.setMyLocationData(locData)
+        }
+        lastX = x
+    }
+
     override fun onClick(v: View?) {
         when (v) {
             ZIB -> {
@@ -40,7 +70,10 @@ class MapFragment : Fragment(), View.OnClickListener {
             }
 
             CA -> {
-                (activity as MainActivity).changeFragment(4)
+                if (scopeGeo == "") {
+                    Toast.makeText(activity, "请选择区域", Toast.LENGTH_SHORT).show()
+                } else
+                    (activity as MainActivity).changeFragment(4)
             }
         }
     }
@@ -84,9 +117,10 @@ class MapFragment : Fragment(), View.OnClickListener {
         return inflater.inflate(com.yunjishi.lixiang.yunjishi.R.layout.fragment_map, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        handlePermisson()
         initMap()
         initViews()
     }
@@ -174,6 +208,9 @@ class MapFragment : Fragment(), View.OnClickListener {
         mMapFragmentbar.title = "请选择拍摄区域"
         (activity as AppCompatActivity).setSupportActionBar(mMapFragmentbar)
         (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        mMapFragmentbar.setNavigationOnClickListener {
+            (activity as MainActivity).changeFragment(2)
+        }
 
         ITL = AppCompatImageView(activity)
         val ITLL = RelativeLayout.LayoutParams(IWidth.toInt(), IWidth.toInt())
@@ -311,6 +348,11 @@ class MapFragment : Fragment(), View.OnClickListener {
                         println("geoString$geoString")
                         scopeGeo = geoFormat(geoString)
                         demandGeo = scopeGeo
+                        var mSharedPreferences: SharedPreferences? = null
+                        mSharedPreferences = activity!!.getSharedPreferences("GEO", Context.MODE_PRIVATE)
+                        val editor = mSharedPreferences!!.edit()
+                        editor.putString("geo", demandGeo)
+                        editor.commit()
                         println("scopeGeo$scopeGeo")
                         center = String.format("%s,%s", (lt.longitude + rb.longitude) / 2, (lt.latitude + rb.latitude) / 2)
                         val leftTop = LatLng(lt.latitude, lt.longitude)
@@ -410,5 +452,32 @@ class MapFragment : Fragment(), View.OnClickListener {
     override fun onPause() {
         super.onPause()
         mMapView!!.onPause()
+    }
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun handlePermisson() {
+        val permission = Manifest.permission.ACCESS_COARSE_LOCATION
+        val checkSelfPermission = ActivityCompat.checkSelfPermission(activity!!, permission)
+        if (checkSelfPermission == PackageManager.PERMISSION_GRANTED) {
+        } else {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(activity!!, permission)) {
+            } else {
+                myRequestPermission()
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun myRequestPermission() {
+        val permissions = arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        requestPermissions(permissions, 1)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//        }
     }
 }
