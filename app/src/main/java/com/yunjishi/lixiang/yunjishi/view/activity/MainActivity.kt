@@ -23,6 +23,7 @@ import com.yunjishi.lixiang.yunjishi.NetworkChangeReceiver
 import com.yunjishi.lixiang.yunjishi.presenter.data.bean.UserBean2
 import com.yunjishi.lixiang.yunjishi.presenter.database.DaoMaster
 import com.yunjishi.lixiang.yunjishi.presenter.database.DaoSession
+import com.yunjishi.lixiang.yunjishi.presenter.database.DataBaseManager
 import org.greenrobot.greendao.database.Database
 import com.yunjishi.lixiang.yunjishi.view.fragment.*
 
@@ -46,9 +47,6 @@ class MainActivity : AppCompatActivity() {
     private var intentFilter: IntentFilter? = null
     private var networkChangeReceiver: NetworkChangeReceiver? = null
     var mactivity: MainActivity? = null
-    fun getDaoSession(): DaoSession {
-        return mDaoSession!!
-    }
 
     override fun onResume() {
         super.onResume()
@@ -63,10 +61,11 @@ class MainActivity : AppCompatActivity() {
         mactivity = this
         StatusBarUtil.setColor(this, Color.parseColor("#262626"), 0)
 
-        registerReceiver(broadcastReceiver,  IntentFilter("NO_ACCESS"))
-        registerReceiver(broadcastReceiver2,  IntentFilter("ACCESS"))
+        registerReceiver(broadcastReceiver, IntentFilter("NO_ACCESS"))
+        registerReceiver(broadcastReceiver2, IntentFilter("ACCESS"))
 
-        initDao()
+//        initDao()
+        mDaoSession = DataBaseManager().initDao(this)
         initFragment()
         initLogin()
         initLogout()
@@ -112,21 +111,21 @@ class MainActivity : AppCompatActivity() {
             }
         }
         mLogoutWebView.loadUrl("http://202.111.178.10:12380/logout.html")
-        mLogoutWebView.registerHandler("closeLoginPage", { data, function ->
+        mLogoutWebView.registerHandler("closeLoginPage") { data, function ->
             println("data$data")
             if (data == "closeLoginPage") {
                 mLogoutLayout.visibility = View.INVISIBLE
             }
-        })
+        }
 
-        mLogoutWebView.registerHandler("logoutCancel", { data, function ->
+        mLogoutWebView.registerHandler("logoutCancel") { data, function ->
             println("data$data")
             if (data == "logoutCancel") {
                 mLogoutLayout.visibility = View.INVISIBLE
             }
-        })
+        }
 
-        mLogoutWebView.registerHandler("logoutSuccess", { data, function ->
+        mLogoutWebView.registerHandler("logoutSuccess") { data, function ->
             println("data$data")
             if (data == "logoutSuccess") {
                 mLogoutLayout.visibility = View.INVISIBLE
@@ -138,7 +137,7 @@ class MainActivity : AppCompatActivity() {
                 overridePendingTransition(0, 0)
                 startActivity(intent)
             }
-        })
+        }
     }
 
     private fun checkLogin(): Boolean {
@@ -186,15 +185,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
         mLoginWebView.loadUrl("http://202.111.178.10:12380/login.html")
-        mLoginWebView.registerHandler("closeLoginPage", { data, function ->
+        mLoginWebView.registerHandler("closeLoginPage") { data, function ->
             println("data$data")
             if (data == "closeLoginPage") {
                 mLoginLayout.visibility = View.GONE
 
 
             }
-        })
-        mLoginWebView.registerHandler("loginSuccess", { data, function ->
+        }
+        mLoginWebView.registerHandler("loginSuccess") { data, function ->
             println("data$data")
             userBean = Gson().fromJson(data, UserBean2::class.java)
             println("userBean.userId" + userBean.userId)
@@ -207,21 +206,21 @@ class MainActivity : AppCompatActivity() {
             finish()
             overridePendingTransition(0, 0)
             startActivity(intent)
-        })
-        mLoginWebView.registerHandler("resetPwd", { data, function ->
+        }
+        mLoginWebView.registerHandler("resetPwd") { data, function ->
             println("data$data")
             val intent = Intent()
             intent.action = "android.intent.action.VIEW"
             intent.data = Uri.parse(data)
             startActivity(intent)
-        })
-        mLoginWebView.registerHandler("register", { data, function ->
+        }
+        mLoginWebView.registerHandler("register") { data, function ->
             println("data$data")
             val intent = Intent()
             intent.action = "android.intent.action.VIEW"
             intent.data = Uri.parse(data)
             startActivity(intent)
-        })
+        }
     }
 
     private val mStack = Stack<Fragment>()
