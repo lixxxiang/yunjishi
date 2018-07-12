@@ -523,17 +523,22 @@ class MissionFragment : BaseMvpFragment<MissionPresenter>(), MissionView, Sensor
             override fun onMapStatusChangeFinish(p0: MapStatus?) {
 
                 if (context != null) {
-                    val ltp = Point()
-                    ltp.x = DimenUtil().dip2px(context!!, 356.5F)
-                    ltp.y = DimenUtil().dip2px(context!!, 105F)
-                    val lt = mBaiduMap!!.projection.fromScreenLocation(ltp)
 
-                    val rbp = Point()
-                    rbp.x = DimenUtil().dip2px(context!!, 782.5F)
-                    rbp.y = DimenUtil().dip2px(context!!, 531F)
-                    val rb = mBaiduMap!!.projection.fromScreenLocation(rbp)
+
 
                     if (mBaiduMap!!.projection != null) {
+
+                        val ltp = Point()
+                        ltp.x = DimenUtil().dip2px(context!!, 356.5F)
+                        ltp.y = DimenUtil().dip2px(context!!, 105F)
+                        val lt = mBaiduMap!!.projection.fromScreenLocation(ltp)
+
+                        val rbp = Point()
+                        rbp.x = DimenUtil().dip2px(context!!, 782.5F)
+                        rbp.y = DimenUtil().dip2px(context!!, 531F)
+                        val rb = mBaiduMap!!.projection.fromScreenLocation(rbp)
+
+
                         geoString = String.format("%s,%s,%s,%s", lt.longitude, lt.latitude, rb.longitude, rb.latitude)
                         println("geoString$geoString")
                         scopeGeo = geoFormat(geoString)

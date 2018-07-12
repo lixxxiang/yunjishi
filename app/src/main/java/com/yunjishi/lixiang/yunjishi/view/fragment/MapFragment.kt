@@ -34,6 +34,7 @@ import com.baidu.mapapi.model.LatLng
 import com.baidu.mapapi.utils.DistanceUtil
 import com.orhanobut.logger.Logger
 import com.yunjishi.lixiang.yunjishi.GetArea
+import com.yunjishi.lixiang.yunjishi.R.id.*
 import com.yunjishi.lixiang.yunjishi.view.activity.MainActivity
 import kotlinx.android.synthetic.main.fragment_map.*
 
@@ -333,17 +334,21 @@ class MapFragment : Fragment(), View.OnClickListener, SensorEventListener {
             override fun onMapStatusChangeFinish(p0: MapStatus?) {
 
                 if (context != null) {
-                    val ltp = Point()
-                    ltp.x = DimenUtil().dip2px(context!!, 356.5F)
-                    ltp.y = DimenUtil().dip2px(context!!, 105F)
-                    val lt = mBaiduMap!!.projection.fromScreenLocation(ltp)
 
-                    val rbp = Point()
-                    rbp.x = DimenUtil().dip2px(context!!, 782.5F)
-                    rbp.y = DimenUtil().dip2px(context!!, 531F)
-                    val rb = mBaiduMap!!.projection.fromScreenLocation(rbp)
 
                     if (mBaiduMap!!.projection != null) {
+
+                        val ltp = Point()
+                        ltp.x = DimenUtil().dip2px(context!!, 356.5F)
+                        ltp.y = DimenUtil().dip2px(context!!, 105F)
+                        val lt = mBaiduMap!!.projection.fromScreenLocation(ltp)
+
+                        val rbp = Point()
+                        rbp.x = DimenUtil().dip2px(context!!, 782.5F)
+                        rbp.y = DimenUtil().dip2px(context!!, 531F)
+                        val rb = mBaiduMap!!.projection.fromScreenLocation(rbp)
+
+
                         geoString = String.format("%s,%s,%s,%s", lt.longitude, lt.latitude, rb.longitude, rb.latitude)
                         println("geoString$geoString")
                         scopeGeo = geoFormat(geoString)
