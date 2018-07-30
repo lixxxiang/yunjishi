@@ -103,6 +103,7 @@
         android:id="@+id/mFrameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#000000"
         android:layout_toRightOf="@+id/mBar"/>
     <LinearLayout
         android:id="@+id/mLoginLayout"

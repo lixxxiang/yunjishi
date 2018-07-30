@@ -21,17 +21,20 @@ import org.jetbrains.anko.support.v4.startActivity
 import com.yunjishi.lixiang.yunjishi.view.activity.MainActivity
 import android.app.Activity
 import android.content.Context
+import android.os.Handler
+import android.webkit.WebView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import com.yunjishi.lixiang.yunjishi.view.activity.PdfViewerActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.logging.Logger
 
 
 class EarthFragment : Fragment() {
 
     var mUploadMessage: ValueCallback<Uri>? = null
-    var userId: String?= ""
-    var loginStatus: String?= ""
+    var userId: String? = ""
+    var loginStatus: String? = ""
     var productId: String? = "-1"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -69,42 +72,60 @@ class EarthFragment : Fragment() {
             fun openFileChooser(uploadMsg: ValueCallback<Uri>) {
                 mUploadMessage = uploadMsg
             }
+
+            override fun onProgressChanged(view: WebView, progress: Int) {
+//                Handler().postDelayed({ rl.visibility = View.GONE }, 5000)
+            }
         }
 
-        if(userId == "-1"){
-            mWebView.loadUrl("http://202.111.178.10:12380/globe.html?loginStatus=$loginStatus")
-        }else{
-            mWebView.loadUrl("http://202.111.178.10:12380/globe.html?userId=$userId&loginStatus=$loginStatus&productId=$productId")
+//        if (userId == "-1") {
+//            mWebView.loadUrl("http://202.111.178.10:12380/globe.html?loginStatus=$loginStatus")
+//        } else {
+//            mWebView.loadUrl("http://202.111.178.10:12380/globe.html?userId=$userId&loginStatus=$loginStatus&productId=$productId")
+//        }
+
+        if (userId == "-1") {
+            mWebView.loadUrl("http://10.10.90.14:8081/globe.html?loginStatus=$loginStatus")
+        } else {
+            mWebView.loadUrl("http://10.10.90.14:8081/globe.html?userId=$userId&loginStatus=$loginStatus&productId=$productId")
         }
+
         mWebView.reload()
-        mWebView.registerHandler("videoPlay", BridgeHandler { data, function ->
-
+        mWebView.registerHandler("videoPlay") { data, function ->
             println("data$data")
             val intent = Intent(activity, VideoPlayerActivity::class.java)
             val bundle = Bundle()
             bundle.putString("URL", data)
             intent.putExtras(bundle)
             startActivity(intent)
-        })
-        mWebView.registerHandler("showLoginPage", BridgeHandler { data, function ->
+        }
+        mWebView.registerHandler("showLoginPage") { data, function ->
 
             println("data$data")
-            if (data == "showLoginPage"){
+            if (data == "showLoginPage") {
                 var mLoginLayout = activity!!.findViewById<LinearLayout>(R.id.mLoginLayout)
                 mLoginLayout.visibility = View.VISIBLE
             }
-        })
-        mWebView.registerHandler("showThematicReport", BridgeHandler { data, function ->
-
+        }
+        mWebView.registerHandler("showThematicReport") { data, function ->
             println("data$data")
-            if (data != ""){
+            if (data != "") {
                 val intent = Intent(activity, PdfViewerActivity::class.java)
                 val bundle = Bundle()
                 bundle.putString("URL", data)
                 intent.putExtras(bundle)
                 startActivity(intent)
             }
-        })
+        }
+        mWebView.registerHandler("loadSuccess") { data, function ->
+            println("data$data")
+            rl.visibility = View.GONE
+//            com.orhanobut.logger.Logger.d(data)
+//            if (data == "loadSuccess") {
+//                Handler().postDelayed({ rl.visibility = View.GONE }, 5000)
+//            }
+
+        }
         sp.edit().clear().commit()
     }
 }

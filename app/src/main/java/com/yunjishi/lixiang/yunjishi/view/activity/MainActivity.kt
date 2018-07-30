@@ -8,7 +8,9 @@ import android.graphics.Color
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
+import android.view.KeyEvent
 import android.view.View
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
@@ -19,6 +21,7 @@ import java.util.*
 import com.github.ikidou.fragmentBackHandler.BackHandlerHelper
 import com.github.lzyzsd.jsbridge.DefaultHandler
 import com.google.gson.Gson
+import com.orhanobut.logger.Logger
 import com.yunjishi.lixiang.yunjishi.NetworkChangeReceiver
 import com.yunjishi.lixiang.yunjishi.presenter.data.bean.UserBean2
 import com.yunjishi.lixiang.yunjishi.presenter.database.DaoMaster
@@ -47,6 +50,7 @@ class MainActivity : AppCompatActivity() {
     private var intentFilter: IntentFilter? = null
     private var networkChangeReceiver: NetworkChangeReceiver? = null
     var mactivity: MainActivity? = null
+    var mCurrentFragment: Fragment? = null
 
     override fun onResume() {
         super.onResume()
@@ -64,7 +68,6 @@ class MainActivity : AppCompatActivity() {
         registerReceiver(broadcastReceiver, IntentFilter("NO_ACCESS"))
         registerReceiver(broadcastReceiver2, IntentFilter("ACCESS"))
 
-//        initDao()
         mDaoSession = DataBaseManager().initDao(this)
         initFragment()
         initLogin()
@@ -82,6 +85,7 @@ class MainActivity : AppCompatActivity() {
                 mLoginLayout.visibility = View.VISIBLE
         }
     }
+
 
     private fun checkAccess() {
         intentFilter = IntentFilter()
@@ -189,8 +193,6 @@ class MainActivity : AppCompatActivity() {
             println("data$data")
             if (data == "closeLoginPage") {
                 mLoginLayout.visibility = View.GONE
-
-
             }
         }
         mLoginWebView.registerHandler("loginSuccess") { data, function ->
@@ -221,6 +223,8 @@ class MainActivity : AppCompatActivity() {
             intent.data = Uri.parse(data)
             startActivity(intent)
         }
+
+
     }
 
     private val mStack = Stack<Fragment>()
@@ -282,15 +286,19 @@ class MainActivity : AppCompatActivity() {
         }
 
         mFeild3.setOnClickListener {
-            mEarthImageView.setBackgroundResource(R.drawable.ic_earth_white)
-            mMissionImageView.setBackgroundResource(R.drawable.ic_mission_white)
-            mSearchImageView.setBackgroundResource(R.drawable.ic_search)
-
-            mEarthTextView.setTextColor(Color.parseColor("#FFFFFF"))
-            mMissionTextView.setTextColor(Color.parseColor("#FFFFFF"))
-            mSearchTextView.setTextColor(Color.parseColor("#738FFE"))
+//            mEarthImageView.setBackgroundResource(R.drawable.ic_earth_white)
+//            mMissionImageView.setBackgroundResource(R.drawable.ic_mission_white)
+//            mSearchImageView.setBackgroundResource(R.drawable.ic_search)
+//
+//            mEarthTextView.setTextColor(Color.parseColor("#FFFFFF"))
+//            mMissionTextView.setTextColor(Color.parseColor("#FFFFFF"))
+//            mSearchTextView.setTextColor(Color.parseColor("#738FFE"))
 //            changeFragment(2)
 
+            val snackBar = Snackbar.make(window.decorView!!, "功能暂未开通", Snackbar.LENGTH_SHORT)
+            snackBar.setAction("确认") { snackBar.dismiss() }
+            snackBar.setActionTextColor(Color.parseColor("#738FFE"))
+            snackBar.show()
         }
 
     }
@@ -302,6 +310,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         manager.show(mStack[position])
+        mCurrentFragment = mStack[position]
         manager.commit()
     }
 
@@ -309,6 +318,48 @@ class MainActivity : AppCompatActivity() {
         if (!BackHandlerHelper.handleBackPress(this)) {
             super.onBackPressed()
         }
+        if (mLoginLayout.visibility == View.VISIBLE) {
+            Logger.d(">>??")
+        }
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (mLoginLayout.visibility == View.VISIBLE) {
+                mLoginLayout.visibility = View.GONE
+                return false
+            }
+            if (mLogoutLayout.visibility == View.VISIBLE) {
+                mLogoutLayout.visibility = View.GONE
+                return false
+            }
+            if (mCurrentFragment == mOrderFragment) {
+                changeFragment(2)
+                return false
+            }
+            if (mCurrentFragment == mDefaultFragment) {
+                changeFragment(0)
+                mEarthImageView.setBackgroundResource(R.drawable.ic_earth)
+                mEarthTextView.setTextColor(Color.parseColor("#738FFE"))
+                mMissionImageView.setBackgroundResource(R.drawable.ic_mission_white)
+                mMissionTextView.setTextColor(Color.parseColor("#FFFFFF"))
+                return false
+            }
+            if (mCurrentFragment == mMapFragment) {
+                changeFragment(2)
+                return false
+            }
+            if (mCurrentFragment == mParamsFragment) {
+                changeFragment(3)
+                return false
+            }
+
+            if (mCurrentFragment == mEarthFragment) {
+                return super.onKeyDown(keyCode, event)
+            }
+        }
+        return super.onKeyDown(keyCode, event)
     }
 
     override fun onDestroy() {
