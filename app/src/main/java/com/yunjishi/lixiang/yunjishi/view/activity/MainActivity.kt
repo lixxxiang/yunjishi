@@ -14,6 +14,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
+import android.widget.Toast
 import com.android.lixiang.base.utils.view.StatusBarUtil
 import com.yunjishi.lixiang.yunjishi.R
 import kotlinx.android.synthetic.main.activity_main.*
@@ -31,6 +32,7 @@ import org.greenrobot.greendao.database.Database
 import com.yunjishi.lixiang.yunjishi.view.fragment.*
 
 class MainActivity : AppCompatActivity() {
+    private var firstTime: Long = 0
 
 
     var broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
@@ -189,6 +191,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
         mLoginWebView.loadUrl("http://202.111.178.10:12380/login.html")
+//        mLoginWebView.loadUrl("http://10.10.90.14:8081/login.html")
+
         mLoginWebView.registerHandler("closeLoginPage") { data, function ->
             println("data$data")
             if (data == "closeLoginPage") {
@@ -356,8 +360,17 @@ class MainActivity : AppCompatActivity() {
             }
 
             if (mCurrentFragment == mEarthFragment) {
-                return super.onKeyDown(keyCode, event)
+//                return super.onKeyDown(keyCode, event)
+                var secondTime = System.currentTimeMillis()
+                if (secondTime - firstTime < 2000) {
+                    System.exit(0);
+                } else {
+                    Toast.makeText(this, "再按一次返回键退出", Toast.LENGTH_SHORT).show();
+                    firstTime = System.currentTimeMillis()
+                }
+                return true
             }
+
         }
         return super.onKeyDown(keyCode, event)
     }

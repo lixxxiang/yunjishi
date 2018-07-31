@@ -78,17 +78,17 @@ class EarthFragment : Fragment() {
             }
         }
 
-//        if (userId == "-1") {
-//            mWebView.loadUrl("http://202.111.178.10:12380/globe.html?loginStatus=$loginStatus")
-//        } else {
-//            mWebView.loadUrl("http://202.111.178.10:12380/globe.html?userId=$userId&loginStatus=$loginStatus&productId=$productId")
-//        }
-
         if (userId == "-1") {
-            mWebView.loadUrl("http://10.10.90.14:8081/globe.html?loginStatus=$loginStatus")
+            mWebView.loadUrl("http://202.111.178.10:12380/globe.html?loginStatus=$loginStatus")
         } else {
-            mWebView.loadUrl("http://10.10.90.14:8081/globe.html?userId=$userId&loginStatus=$loginStatus&productId=$productId")
+            mWebView.loadUrl("http://202.111.178.10:12380/globe.html?userId=$userId&loginStatus=$loginStatus&productId=$productId")
         }
+
+//        if (userId == "-1") {
+//            mWebView.loadUrl("http://10.10.90.14:8081/globe.html?loginStatus=$loginStatus")
+//        } else {
+//            mWebView.loadUrl("http://10.10.90.14:8081/globe.html?userId=$userId&loginStatus=$loginStatus&productId=$productId")
+//        }
 
         mWebView.reload()
         mWebView.registerHandler("videoPlay") { data, function ->
